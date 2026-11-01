@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>招聘 · 绩效 · 薪酬体系全域对齐治理解决方案</title>
+<style>
+  :root{
+    --bg:#f5f7fb;
+    --surface:#ffffff;
+    --ink:#1a2233;
+    --ink-soft:#52607a;
+    --line:#e3e8f0;
+    --brand:#2b59ff;
+    --brand-soft:#eef2ff;
+    --accent:#0fb5a6;
+    --warn:#f5a623;
+    --danger:#e5484d;
+    --gold:#c8962a;
+    --shadow:0 8px 24px rgba(20,40,90,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.7;
+  }
+  /* NAV */
+  .nav{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+    padding:10px 24px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;
+  }
+  .nav .logo{font-weight:800;color:var(--brand);margin-right:14px;letter-spacing:.5px}
+  .nav a{
+    text-decoration:none;color:var(--ink-soft);font-size:13px;padding:6px 11px;
+    border-radius:8px;transition:.2s;white-space:nowrap;
+  }
+  .nav a:hover{background:var(--brand-soft);color:var(--brand)}
+  /* HERO */
+  .hero{
+    background:linear-gradient(135deg,#1e36b8 0%,#2b59ff 45%,#0fb5a6 100%);
+    color:#fff;padding:64px 32px 56px;text-align:center;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 20% 20%,rgba(255,255,255,.18),transparent 40%),
+              radial-gradient(circle at 80% 70%,rgba(255,255,255,.12),transparent 45%);
+  }
+  .hero>*{position:relative;z-index:1}
+  .hero h1{font-size:34px;font-weight:800;letter-spacing:1px}
+  .hero p{margin-top:14px;font-size:16px;opacity:.92;max-width:760px;margin-left:auto;margin-right:auto}
+  .hero .tags{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .hero .tags span{
+    background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+    padding:6px 14px;border-radius:20px;font-size:13px;
+  }
+  /* LAYOUT */
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  section{padding:56px 0;border-bottom:1px solid var(--line)}
+  .sec-head{margin-bottom:32px}
+  .sec-head .num{
+    display:inline-block;background:var(--brand-soft);color:var(--brand);
+    font-weight:800;font-size:13px;padding:3px 12px;border-radius:8px;margin-bottom:10px;
+  }
+  .sec-head h2{font-size:26px;font-weight:800}
+  .sec-head .sub{color:var(--ink-soft);margin-top:8px;font-size:15px}
+  /* CARDS GRID */
+  .grid{display:grid;gap:18px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  @media(max-width:860px){.g2,.g3{grid-template-columns:1fr}}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:22px;box-shadow:var(--shadow);transition:.25s;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(20,40,90,.12)}
+  .card .ic{
+    width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:800;margin-bottom:12px;background:var(--brand-soft);color:var(--brand);
+  }
+  .card h3{font-size:17px;margin-bottom:8px}
+  .card p{color:var(--ink-soft);font-size:14px}
+  .card .pin{color:var(--danger);font-weight:600}
+  /* GOALS */
+  .goals{display:flex;flex-wrap:wrap;gap:12px}
+  .goal{
+    flex:1 1 220px;background:var(--surface);border-left:4px solid var(--accent);
+    border-radius:10px;padding:14px 16px;font-size:14px;box-shadow:var(--shadow);
+  }
+  .goal b{color:var(--accent)}
+  /* ARCHITECTURE LAYERS */
+  .layer{
+    border-radius:14px;padding:24px;margin-bottom:16px;position:relative;overflow:hidden;
+    border:1px solid var(--line);
+  }
+  .layer .badge{
+    display:inline-block;font-weight:800;font-size:13px;padding:4px 12px;border-radius:8px;margin-bottom:14px;
+  }
+  .l1{background:linear-gradient(120deg,#fff6e6,#fffdf7);border-color:#f0dca8}
+  .l1 .badge{background:#fbe6b8;color:#8a5a00}
+  .l2{background:linear-gradient(120deg,#eef7ff,#f7fbff);border-color:#cfe2fb}
+  .l2 .badge{background:#d7e9ff;color:#1f5bc4}
+  .l3{background:linear-gradient(120deg,#eef3ff,#f6f9ff);border-color:#cfd8fb}
+  .l3 .badge{background:#d9defb;color:#3b3fb0}
+  .layer h3{font-size:18px;margin-bottom:6px}
+  .layer .desc{color:var(--ink-soft);font-size:14px;margin-bottom:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px}
+  .l1 .chip{border-color:#f0dca8}
+  /* LOOP DIAGRAM */
+  .loop{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;justify-content:center}
+  .loop .node{
+    flex:1 1 240px;min-width:210px;background:var(--surface);border:2px solid var(--brand);
+    border-radius:16px;padding:22px;text-align:center;position:relative;box-shadow:var(--shadow);
+  }
+  .loop .node h4{font-size:18px;color:var(--brand);margin-bottom:8px}
+  .loop .node ul{list-style:none;text-align:left;font-size:13px;color:var(--ink-soft)}
+  .loop .node li{padding:3px 0;border-bottom:1px dashed var(--line)}
+  .loop .arrow{
+    align-self:center;font-size:26px;color:var(--accent);padding:0 14px;font-weight:800;
+  }
+  @media(max-width:860px){.loop .arrow{transform:rotate(90deg)}}
+  .loop-note{
+    margin-top:18px;text-align:center;color:var(--ink-soft);font-size:14px;
+    background:var(--brand-soft);border-radius:10px;padding:12px;
+  }
+  /* RULES */
+  .rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+  .rule{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;
+    display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow);
+  }
+  .rule .rn{
+    flex:0 0 34px;height:34px;border-radius:9px;background:var(--danger);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
+  }
+  .rule p{font-size:14px}
+  /* PERMISSION */
+  table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+  th,td{border:1px solid var(--line);padding:12px 14px;text-align:left;font-size:14px}
+  th{background:var(--brand);color:#fff;font-weight:700}
+  tbody tr:nth-child(even){background:#fafbfe}
+  .pill{display:inline-block;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600}
+  .p-red{background:#fdecec;color:var(--danger)}
+  .p-amber{background:#fef3e0;color:var(--warn)}
+  .p-green{background:#e7f8f4;color:var(--accent)}
+  /* TIMELINE */
+  .timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  @media(max-width:860px){.timeline{grid-template-columns:1fr}}
+  .phase{background:var(--surface);border-top:5px solid var(--brand);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+  .phase .ph{font-weight:800;color:var(--brand);font-size:15px;margin-bottom:4px}
+  .phase .pt{color:var(--ink-soft);font-size:13px;margin-bottom:12px}
+  .phase ul{list-style:none}
+  .phase li{padding:5px 0 5px 18px;position:relative;font-size:13.5px;color:var(--ink)}
+  .phase li::before{content:"▸";position:absolute;left:0;color:var(--accent)}
+  /* VALUE */
+  .val-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  @media(max-width:860px){.val-grid{grid-template-columns:1fr}}
+  .val{border-radius:14px;padding:20px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow)}
+  .val h3{font-size:17px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  .val h3 .dot{width:12px;height:12px;border-radius:50%}
+  .val li{font-size:14px;padding:4px 0;color:var(--ink-soft);list-style:none;padding-left:18px;position:relative}
+  .val li::before{content:"✓";position:absolute;left:0;color:var(--accent);font-weight:800}
+  /* DELIVERABLES */
+  .dels{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+  .del{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;gap:14px;align-items:flex-start;box-shadow:var(--shadow)}
+  .del .dn{flex:0 0 38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--accent));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+  .del p{font-size:14px}
+  /* SUMMARY */
+  .summary{background:linear-gradient(135deg,#0f1f5c,#2b59ff);color:#fff;border-radius:18px;padding:40px;text-align:center}
+  .summary h2{font-size:24px;margin-bottom:14px}
+  .summary p{opacity:.92;max-width:820px;margin:0 auto;font-size:15px}
+  .summary .five{margin-top:22px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .summary .five span{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4);padding:6px 14px;border-radius:20px;font-size:13px}
+  footer{text-align:center;padding:28px;color:var(--ink-soft);font-size:13px}
+  .toc-jump{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .toc-jump a{text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:13px;color:var(--ink-soft);box-shadow:var(--shadow)}
+  .toc-jump a:hover{color:var(--brand);border-color:var(--brand)}
+</style>
+<meta name="description" content="面向 HR 域的招聘、绩效、薪酬三体系全域对齐治理方案：把岗位标准、AI 评估、人岗匹配与薪酬决策接入同一套可审计、可裁决的治理链路。">
+<meta name="keywords" content="招聘治理,绩效治理,薪酬治理,人岗匹配,岗位标准,HR数字化,全域对齐,AI招聘">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="author" content="元极恒一 ZONGYUAN-ROOT Lv11 自治内核 · DID-BR-000002">
+<meta name="theme-color" content="#1e2a52">
+<meta name="revisit-after" content="7 days">
+<link rel="canonical" href="https://www.huodouai.com/whitepaper/recruit-performance-payroll-governance.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="元极恒一技术白皮书门户">
+<meta property="og:title" content="招聘 · 绩效 · 薪酬体系全域对齐治理解决方案">
+<meta property="og:description" content="面向 HR 域的招聘、绩效、薪酬三体系全域对齐治理方案：把岗位标准、AI 评估、人岗匹配与薪酬决策接入同一套可审计、可裁决的治理链路。">
+<meta property="og:url" content="https://www.huodouai.com/whitepaper/recruit-performance-payroll-governance.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="招聘 · 绩效 · 薪酬体系全域对齐治理解决方案">
+<meta name="twitter:description" content="面向 HR 域的招聘、绩效、薪酬三体系全域对齐治理方案：把岗位标准、AI 评估、人岗匹配与薪酬决策接入同一套可审计、可裁决的治理链路。">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "招聘 · 绩效 · 薪酬体系全域对齐治理解决方案", "url": "https://www.huodouai.com/whitepaper/recruit-performance-payroll-governance.html", "datePublished": "2026-10-28", "dateModified": "2026-10-28", "inLanguage": "zh-CN", "author": {"@type": "Organization", "name": "元极恒一 ZONGYUAN-ROOT", "identifier": "DID-BR-000002"}, "publisher": {"@type": "Organization", "name": "元极恒一 ZONGYUAN-ROOT Lv11 自治内核", "identifier": "DID-BR-000002"}, "about": ["招聘治理", "绩效治理", "薪酬治理", "人岗匹配"], "description": "面向 HR 域的招聘、绩效、薪酬三体系全域对齐治理方案：把岗位标准、AI 评估、人岗匹配与薪酬决策接入同一套可审计、可裁决的治理链路。"}
+</script>
+<style>.back{display:inline-block;margin:0 0 14px;font-size:13px;font-weight:600;color:#1b9aaa;text-decoration:none}.back:hover{color:#0e7d8a}</style></head>
+<body>
+<a class="back" href="index.html">← 返回白皮书库</a>
+
+
+<div class="nav">
+  <span class="logo">Ω HR·治理</span>
+  <a href="#bg">背景痛点</a>
+  <a href="#goal">方案目标</a>
+  <a href="#arch">顶层设计</a>
+  <a href="#loop">三体系闭环</a>
+  <a href="#rules">规则体系</a>
+  <a href="#risk">风险风控</a>
+  <a href="#roll">实施步骤</a>
+  <a href="#value">治理价值</a>
+  <a href="#deliv">交付成果</a>
+</div>
+
+<div class="hero">
+  <h1>招聘 · 绩效 · 薪酬体系<br>全域对齐治理解决方案</h1>
+  <p>以「同一套职级基线、同一套规则体系、同一套审批链路、同一套审计账本」为总纲，将经验型 HR 管理升级为规则治理 + 流程治理 + 数据治理的现代化体系。</p>
+  <div class="tags">
+    <span>职级统一</span><span>规则统一</span><span>数据统一</span><span>流程统一</span><span>风控统一</span>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 1. BACKGROUND -->
+  <section id="bg">
+    <div class="sec-head">
+      <span class="num">01</span>
+      <h2>方案背景与现存痛点</h2>
+      <div class="sub">多数企业招聘、绩效、薪酬三套体系割裂运行，导致管理不闭环、标准不统一、成本失控、公平性不足。</div>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="ic">①</div>
+        <h3>职级口径不统一</h3>
+        <p>招聘定级、内部晋升、薪酬套档三套标准不一致，出现<span class="pin">「同岗不同级、同级不同薪」</span>。</p>
+      </div>
+      <div class="card">
+        <div class="ic">②</div>
+        <h3>薪酬带宽混乱</h3>
+        <p>新人薪资随意、老员工倒挂、高薪超带宽无审批、调薪无统一依据。</p>
+      </div>
+      <div class="card">
+        <div class="ic">③</div>
+        <h3>绩效与薪酬脱节</h3>
+        <p>打分凭感觉、分布失控、优秀泛滥、不合格豁免，绩效结果无法指导调薪/晋升/淘汰，<span class="pin">形同虚设</span>。</p>
+      </div>
+      <div class="card">
+        <div class="ic">④</div>
+        <h3>人事决策无治理</h3>
+        <p>录用、调薪、晋升、定级依赖人工经验，<span class="pin">无规则、无审计、无预警</span>，易生纠纷与合规风险。</p>
+      </div>
+      <div class="card" style="grid-column:1/-1">
+        <div class="ic">⑤</div>
+        <h3>没有统一基线、没有标准化 SOP</h3>
+        <p>制度零散、流程碎片化，新老 HR 执行标准不一致，团队迭代导致管理口径断层。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. GOAL -->
+  <section id="goal">
+    <div class="sec-head">
+      <span class="num">02</span>
+      <h2>方案目标</h2>
+      <div class="sub">建立「职级统一、规则统一、数据统一、流程统一、风控统一」的人力治理体系。</div>
+    </div>
+    <div class="goals">
+      <div class="goal"><b>招聘</b> 定人定岗定薪标准化</div>
+      <div class="goal"><b>绩效</b> 评价公正化、分布可控化</div>
+      <div class="goal"><b>薪酬</b> 定级 / 异动 / 调薪规则透明化</div>
+      <div class="goal"><b>联动</b> 三体系自动校验、异常预警、全程留痕</div>
+      <div class="goal"><b>升级</b> 从「人治人力」到「规则 + 流程 + 数据治理」</div>
+    </div>
+  </section>
+
+  <!-- 3. ARCHITECTURE -->
+  <section id="arch">
+    <div class="sec-head">
+      <span class="num">03</span>
+      <h2>整体顶层设计 · 三层治理架构</h2>
+      <div class="sub">治理总纲领：同一套职级基线、规则体系、审批链路、审计账本。招聘按基线招人，绩效按基线考核，薪酬按基线定薪/调薪/异动。</div>
+    </div>
+
+    <div class="layer l1">
+      <span class="badge">L1 · 黄金真值基线（企业绝对标准）</span>
+      <h3>公司人力宪法 —— 禁止随意改动</h3>
+      <div class="desc">改动必须双人评审 + 全量回归测试。</div>
+      <div class="chips">
+        <span class="chip">职级体系字典 P1–P7</span>
+        <span class="chip">各职级固定薪酬带宽区间</span>
+        <span class="chip">绩效等级定义 S/A/B/C/D</span>
+        <span class="chip">绩效配额分布标准</span>
+        <span class="chip">调薪 / 晋升准入硬性条件</span>
+      </div>
+    </div>
+
+    <div class="layer l2">
+      <span class="badge">L2 · 边界扩展基线（业务特例 / 浮动规则）</span>
+      <h3>可月度复盘迭代，不影响核心稳定</h3>
+      <div class="desc">承接业务弹性，隔离核心体系波动。</div>
+      <div class="chips">
+        <span class="chip">地区薪资上浮系数</span>
+        <span class="chip">绩效奖金核算公式</span>
+        <span class="chip">社保公积金标准</span>
+        <span class="chip">稀缺人才破格特例</span>
+        <span class="chip">重大项目破格晋升特例</span>
+        <span class="chip">不可抗力绩效豁免特例</span>
+      </div>
+    </div>
+
+    <div class="layer l3">
+      <span class="badge">L3 · 规则引擎 + 工单治理层</span>
+      <h3>自动化校验 + 人工终审</h3>
+      <div class="desc">11 条刚性人力元规则 + 标准化 SOP + 异常告警 / 分歧台账 / 审计留痕。</div>
+      <div class="chips">
+        <span class="chip">11 条刚性元规则</span>
+        <span class="chip">标准化 SOP 工单流程</span>
+        <span class="chip">异常告警</span>
+        <span class="chip">分歧台账</span>
+        <span class="chip">审计留痕</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. LOOP -->
+  <section id="loop">
+    <div class="sec-head">
+      <span class="num">04</span>
+      <h2>三体系全域对齐逻辑 · 业务闭环</h2>
+      <div class="sub">招 → 绩 → 薪完全自洽、口径统一、互相校验、互相约束。</div>
+    </div>
+
+    <div class="loop">
+      <div class="node">
+        <h4>招聘体系</h4>
+        <ul>
+          <li>岗位绑定标准职级</li>
+          <li>Offer 薪资落带宽内</li>
+          <li>禁止歧视性筛选</li>
+          <li>超带宽走双人审批</li>
+        </ul>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <h4>绩效体系</h4>
+        <ul>
+          <li>等级分布强制配额</li>
+          <li>跨周期大幅跳变复盘</li>
+          <li>禁止随意淘汰差评</li>
+          <li>自动输出调薪/晋升资格</li>
+        </ul>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node">
+        <h4>薪酬异动</h4>
+        <ul>
+          <li>绩效不达标禁调薪</li>
+          <li>晋升匹配历史绩效</li>
+          <li>调薪后落职级带宽</li>
+          <li>全程审计留痕</li>
+        </ul>
+      </div>
+      <div class="arrow">→</div>
+      <div class="node" style="border-color:var(--accent)">
+        <h4 style="color:var(--accent)">反向固化</h4>
+        <ul>
+          <li>异动记录固化职级档案</li>
+          <li>闭环回到招聘基线</li>
+          <li>口径自洽不漂移</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="loop-note">
+      <b>联动闭环：</b> 招聘职级 → 决定薪酬带宽 ｜ 周期绩效 → 决定下次调薪与晋升资格 ｜ 薪酬异动 → 反向固化员工职级档案
+    </div>
+  </section>
+
+  <!-- 5. RULES -->
+  <section id="rules">
+    <div class="sec-head">
+      <span class="num">05</span>
+      <h2>标准化制度与刚性元规则体系</h2>
+      <div class="sub">企业强制执行 · 11 条刚性人力元规则 + 全流程 SOP 标准化。</div>
+    </div>
+    <div class="rules">
+      <div class="rule"><span class="rn">1</span><p>招聘反歧视拦截规则</p></div>
+      <div class="rule"><span class="rn">2</span><p>Offer 薪资带宽校验规则</p></div>
+      <div class="rule"><span class="rn">3</span><p>背调结论人工终审规则</p></div>
+      <div class="rule"><span class="rn">4</span><p>绩效配额分布管控规则</p></div>
+      <div class="rule"><span class="rn">5</span><p>绩效大幅跳变复盘规则</p></div>
+      <div class="rule"><span class="rn">6</span><p>禁止 AI/系统自动定性处罚规则</p></div>
+      <div class="rule"><span class="rn">7</span><p>薪酬基线变更高门禁规则</p></div>
+      <div class="rule"><span class="rn">8</span><p>薪酬禁止自动落盘系统规则</p></div>
+      <div class="rule"><span class="rn">9</span><p>薪酬权限最小权限审计规则</p></div>
+      <div class="rule"><span class="rn">10</span><p>绩效-调薪跨域准入校验规则</p></div>
+      <div class="rule"><span class="rn">11</span><p>招聘职级基线合法性校验规则</p></div>
+    </div>
+
+    <div class="sec-head" style="margin-top:40px">
+      <span class="num">05·B</span>
+      <h2>全流程 SOP 标准化</h2>
+    </div>
+    <div class="rules">
+      <div class="rule"><span class="rn" style="background:var(--brand)">S</span><p>招聘 Offer 审批 SOP</p></div>
+      <div class="rule"><span class="rn" style="background:var(--brand)">S</span><p>绩效批量核算与生效 SOP</p></div>
+      <div class="rule"><span class="rn" style="background:var(--brand)">S</span><p>调薪 / 晋升异动审批 SOP</p></div>
+      <div class="rule"><span class="rn" style="background:var(--brand)">S</span><p>基线变更专项审批 SOP</p></div>
+      <div class="rule"><span class="rn" style="background:var(--brand)">S</span><p>争议 / 申诉 / 分歧台账复盘 SOP</p></div>
+    </div>
+  </section>
+
+  <!-- 6. RISK -->
+  <section id="risk">
+    <div class="sec-head">
+      <span class="num">06</span>
+      <h2>风险治理与合规风控体系</h2>
+      <div class="sub">高风险人事动作全部强制人工终审 · 全程审计留痕 · 权限隔离。</div>
+    </div>
+
+    <h3 style="margin-bottom:14px;font-size:17px">高风险动作（强制人工终审）</h3>
+    <div class="chips" style="margin-bottom:34px">
+      <span class="chip">录用结论</span><span class="chip">绩效最终等级</span><span class="chip">调薪审批</span>
+      <span class="chip">晋升定级</span><span class="chip">超带宽薪资审批</span><span class="chip">淘汰 / 劝退 / 处罚结论</span>
+    </div>
+
+    <h3 style="margin-bottom:14px;font-size:17px">权限隔离体系</h3>
+    <table>
+      <thead>
+        <tr><th>角色</th><th>权限范围</th><th>治理定位</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>普通主管</td><td>仅打分、自评</td><td><span class="pill p-green">执行端</span></td></tr>
+        <tr><td>HR 专员</td><td>仅执行、试算、提报</td><td><span class="pill p-green">执行端</span></td></tr>
+        <tr><td>HR 负责人</td><td>基线审核、特例审批</td><td><span class="pill p-amber">审核端</span></td></tr>
+        <tr><td>治理管理员</td><td>规则与基线版本管控</td><td><span class="pill p-red">管控端</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="loop-note" style="margin-top:22px">
+      <b>审计留痕：</b> 所有操作记录 操作人 / 时间 / 意图 / 规则命中 / 基线版本 / 工单 ID；所有争议进入台账，月度复盘迭代制度。
+    </div>
+  </section>
+
+  <!-- 7. ROLLOUT -->
+  <section id="roll">
+    <div class="sec-head">
+      <span class="num">07</span>
+      <h2>落地实施步骤 · 四阶段落地法</h2>
+      <div class="sub">从基线固化到自治进化，平滑切换、风险可控。</div>
+    </div>
+    <div class="timeline">
+      <div class="phase">
+        <div class="ph">阶段一 · 基线固化</div>
+        <div class="pt">1–3 天</div>
+        <ul>
+          <li>统一职级字典</li>
+          <li>统一薪酬带宽</li>
+          <li>统一绩效等级与配额</li>
+          <li>上线核心刚性规则</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph">阶段二 · 流程闭环</div>
+        <div class="pt">3–7 天</div>
+        <ul>
+          <li>上线招聘工单</li>
+          <li>上线绩效校验流程</li>
+          <li>上线薪酬异动审批</li>
+          <li>打通三体系联动校验</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph">阶段三 · 稳态运行</div>
+        <div class="pt">1 个绩效周期</div>
+        <ul>
+          <li>全流程跑通真实业务</li>
+          <li>积累首批分歧案例</li>
+          <li>完成首次制度复盘优化</li>
+        </ul>
+      </div>
+      <div class="phase">
+        <div class="ph">阶段四 · 自治进化</div>
+        <div class="pt">长期</div>
+        <ul>
+          <li>月度台账复盘</li>
+          <li>边界规则迭代</li>
+          <li>基线健康度巡检</li>
+          <li>治理数据看板监控</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. VALUE -->
+  <section id="value">
+    <div class="sec-head">
+      <span class="num">08</span>
+      <h2>治理价值与企业收益</h2>
+      <div class="sub">管理、成本、风险、组织四重价值。</div>
+    </div>
+    <div class="val-grid">
+      <div class="val">
+        <h3><span class="dot" style="background:var(--brand)"></span>管理价值</h3>
+        <ul>
+          <li>一套标准管全员，解决口径混乱</li>
+          <li>人事决策透明化、可解释、可追溯</li>
+          <li>新人上手极快，不依赖资深经验</li>
+        </ul>
+      </div>
+      <div class="val">
+        <h3><span class="dot" style="background:var(--danger)"></span>成本价值</h3>
+        <ul>
+          <li>杜绝薪资倒挂、乱加薪、超预算</li>
+          <li>绩效激励精准化，投入产出比更高</li>
+          <li>人力成本可预测、可管控</li>
+        </ul>
+      </div>
+      <div class="val">
+        <h3><span class="dot" style="background:var(--warn)"></span>风险价值</h3>
+        <ul>
+          <li>大幅降低劳动仲裁与申诉风险</li>
+          <li>所有关键决策留痕合规</li>
+          <li>杜绝人工舞弊、人情管理</li>
+        </ul>
+      </div>
+      <div class="val">
+        <h3><span class="dot" style="background:var(--accent)"></span>组织价值</h3>
+        <ul>
+          <li>激励真正向高绩效员工倾斜</li>
+          <li>公平性提升、员工稳定性提升</li>
+          <li>HR 体系升级为现代化治理体系</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. DELIVERABLES -->
+  <section id="deliv">
+    <div class="sec-head">
+      <span class="num">09</span>
+      <h2>交付成果清单 · 全套落地资产</h2>
+      <div class="sub">本方案交付 7 类可直接落地的治理资产。</div>
+    </div>
+    <div class="dels">
+      <div class="del"><span class="dn">1</span><p>《HR 人力专项元规则集》JSON 规则库</p></div>
+      <div class="del"><span class="dn">2</span><p>《L1 职级-薪酬-绩效黄金基线》真值库</p></div>
+      <div class="del"><span class="dn">3</span><p>《L2 边界特例与浮动规则基线》</p></div>
+      <div class="del"><span class="dn">4</span><p>HR 三大引擎：简历解析 / 薪酬试算 / 绩效校验</p></div>
+      <div class="del"><span class="dn">5</span><p>全流程标准化 SOP 工单系统</p></div>
+      <div class="del"><span class="dn">6</span><p>HR 治理稳态监控数据看板</p></div>
+      <div class="del"><span class="dn">7</span><p>全域锁档索引与资产溯源账本</p></div>
+    </div>
+    <div class="toc-jump">
+      <a href="#bg">↑ 回到痛点</a>
+      <a href="#arch">↑ 顶层设计</a>
+      <a href="#loop">↑ 三体系闭环</a>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section style="border-bottom:none">
+    <div class="summary">
+      <h2>方案总结</h2>
+      <p>通过基线统一、规则统一、流程统一、风控统一、数据统一，彻底解决招聘、绩效、薪酬体系割裂、管理混乱、成本失控、公平性不足等核心问题。将传统「经验型 HR 管理」升级为标准化、流程化、数字化、可审计、可进化的现代化人力资源治理体系，适配企业长期规模化发展。</p>
+      <div class="five">
+        <span>基线统一</span><span>规则统一</span><span>流程统一</span><span>风控统一</span><span>数据统一</span>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  招聘-绩效-薪酬体系全域对齐治理解决方案 · 可视化报告　|　Ω-Brain 自治治理资产　|　全域锁档索引已生成
+</footer>
+
+<script>
+  // 滚动高亮导航
+  const links=[...document.querySelectorAll('.nav a')];
+  const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  const obs=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const id='#'+e.target.id;
+        links.forEach(l=>l.style.background=l.getAttribute('href')===id?'var(--brand-soft)':'');
+        links.forEach(l=>l.style.color=l.getAttribute('href')===id?'var(--brand)':'');
+      }
+    });
+  },{rootMargin:'-40% 0px -55% 0px'});
+  secs.forEach(s=>s&&obs.observe(s));
+</script>
+<div style="text-align:center;padding:20px;font-size:11px;color:#666;border-top:1px solid #333"><a href="/" style="color:#888;margin:0 6px">主页</a>·<a href="/pipeline.html" style="color:#888;margin:0 6px">流水线</a>·<a href="/products.html" style="color:#888;margin:0 6px">产品</a>·<a href="/status.html" style="color:#888;margin:0 6px">状态</a></div></body>
+</html>
