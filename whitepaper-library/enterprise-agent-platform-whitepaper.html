@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>企业级智能体中台架构选型与自进化体系技术白皮书</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='16' fill='%231d4ed8'/><text x='50' y='68' font-size='58' text-anchor='middle' fill='%23ffffff'>Ω</text></svg>">
+<script src="https://fastly.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<style>
+:root{
+  --bg:#f5f7fa;
+  --card:#ffffff;
+  --line:#e4e9f2;
+  --blue:#1d4ed8;
+  --blue2:#3b82f6;
+  --blue-soft:#eef3ff;
+  --gold:#b8912f;
+  --gold-soft:#faf6ea;
+  --ink:#16233c;
+  --text:#3a4a63;
+  --muted:#7b8aa3;
+  --green:#2f9e63;
+  --green-soft:#e9f6ef;
+  --red:#d64550;
+  --red-soft:#fbeeef;
+  --cyan:#0f9d94;
+  --shadow:0 1px 2px rgba(22,35,60,.05),0 8px 24px rgba(22,35,60,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,"PingFang SC","Microsoft YaHei","Helvetica Neue",sans-serif;line-height:1.7;font-size:15px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+/* ===== NAV ===== */
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1180px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--ink);font-size:15px;white-space:nowrap}
+.brand .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--blue),#4f46e5);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800}
+.nav-links{display:flex;gap:22px;font-size:13px;color:var(--muted);white-space:nowrap}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--blue)}
+@media(max-width:768px){.nav-links{display:none}}
+/* ===== HERO ===== */
+.hero{background:linear-gradient(180deg,#ffffff,var(--bg));padding:72px 0 56px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-120px;right:-80px;width:560px;height:560px;background:radial-gradient(circle,rgba(29,78,216,.08),transparent 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;bottom:-140px;left:-60px;width:480px;height:480px;background:radial-gradient(circle,rgba(184,145,47,.07),transparent 70%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--gold);font-size:12px;letter-spacing:2px;font-weight:600;margin-bottom:18px;background:var(--gold-soft);padding:5px 12px;border-radius:4px;border:1px solid #eadfbe}
+h1{font-size:40px;line-height:1.25;font-weight:800;color:var(--ink);margin-bottom:20px;letter-spacing:.5px}
+h1 .g{color:var(--blue)}
+h1 .gold{color:var(--gold)}
+.sub{color:var(--muted);font-size:17px;max-width:800px}
+.anchors{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.anchors span{padding:5px 14px;border:1px solid var(--line);border-radius:5px;background:var(--card)}
+.anchors b{color:var(--blue);font-weight:700}
+/* ===== SECTIONS ===== */
+section{padding:60px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:none}
+h2{font-size:26px;font-weight:800;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:12px}
+h2 .num{font-size:13px;font-weight:700;color:#fff;background:var(--blue);padding:4px 10px;border-radius:6px;letter-spacing:1px}
+.lead{color:var(--muted);margin-bottom:30px;max-width:840px}
+h3{font-size:18px;margin:26px 0 12px;color:var(--ink);font-weight:700}
+/* ===== CARDS ===== */
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:900px){.grid2,.grid3,.grid4{grid-template-columns:1fr}h1{font-size:28px}}
+.card{background:var(--card);border:1px solid var(--line);padding:24px;border-radius:8px;box-shadow:var(--shadow)}
+.card h4{font-size:16px;color:var(--ink);margin-bottom:10px;font-weight:700}
+.card p{color:var(--muted);font-size:14px}
+.tag{display:inline-block;padding:2px 9px;font-size:12px;border-radius:4px;margin-right:6px;margin-bottom:6px;font-weight:500}
+.tag.b{background:var(--blue-soft);color:var(--blue)}
+.tag.g{background:var(--green-soft);color:var(--green)}
+.tag.y{background:var(--gold-soft);color:var(--gold)}
+.tag.r{background:var(--red-soft);color:var(--red)}
+.tag.c{background:#e6f6f5;color:var(--cyan)}
+/* ===== TABLE ===== */
+.tablewrap{overflow-x:auto;margin:16px 0;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:8px;background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:680px}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+th{color:var(--ink);font-weight:700;background:var(--blue-soft)}
+td{color:var(--text)}
+td:first-child{color:var(--muted);font-weight:600}
+/* ===== CHART ===== */
+.chart{width:100%;height:420px;margin:16px 0;background:var(--card);border:1px solid var(--line);border-radius:8px}
+/* ===== ARCH ===== */
+.arch{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:24px 0}
+.arch-layer{padding:24px;border-radius:8px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);border-top:3px solid var(--blue)}
+.arch-layer.l1{border-top-color:var(--green)}
+.arch-layer.l2{border-top-color:var(--blue2)}
+.arch-layer.l3{border-top-color:var(--gold)}
+.arch-layer .lname{font-size:12px;color:var(--muted);letter-spacing:1.5px;margin-bottom:8px;text-transform:uppercase}
+.arch-layer .ltitle{font-size:18px;font-weight:800;color:var(--ink);margin-bottom:12px}
+.arch-layer ul{list-style:none;font-size:13px;color:var(--muted)}
+.arch-layer li{padding:4px 0;padding-left:16px;position:relative}
+.arch-layer li::before{content:"";position:absolute;left:0;top:12px;width:7px;height:7px;border-radius:2px}
+.l1 li::before{background:var(--green)}
+.l2 li::before{background:var(--blue2)}
+.l3 li::before{background:var(--gold)}
+@media(max-width:900px){.arch{grid-template-columns:1fr}}
+/* ===== FLOW ===== */
+.flow{display:flex;align-items:stretch;gap:0;margin:24px 0;flex-wrap:wrap}
+.flow-step{flex:1;min-width:150px;padding:18px 16px;background:var(--card);border:1px solid var(--line);text-align:center;position:relative}
+.flow-step:first-child{border-radius:8px 0 0 8px}
+.flow-step:last-child{border-radius:0 8px 8px 0}
+.flow-step:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:var(--blue);font-size:20px;z-index:2;font-weight:700}
+.flow-step .num{color:var(--blue);font-weight:800;font-size:13px;display:block;margin-bottom:6px}
+.flow-step .t{font-size:14px;font-weight:700;color:var(--ink)}
+.flow-step .d{font-size:12px;color:var(--muted);margin-top:4px}
+@media(max-width:900px){.flow{flex-direction:column}.flow-step:first-child{border-radius:8px 8px 0 0}.flow-step:last-child{border-radius:0 0 8px 8px}.flow-step:not(:last-child)::after{content:"↓";right:50%;top:auto;bottom:-16px;transform:translateX(50%)}}
+/* ===== STATS ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}
+.stat{padding:22px;border-radius:8px;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue)}
+.stat .v{font-size:30px;font-weight:800;color:var(--blue)}
+.stat .l{font-size:13px;color:var(--muted);margin-top:6px}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}}
+/* ===== HIGHLIGHT ===== */
+.highlight{border-left:4px solid var(--blue);background:var(--blue-soft);padding:20px 24px;border-radius:0 8px 8px 0;margin-top:18px}
+.highlight h4{color:var(--blue);margin-bottom:6px}
+.highlight p{color:var(--text);font-size:15px}
+/* ===== FOOTER ===== */
+footer{padding:44px 0;text-align:center;color:var(--muted);font-size:13px;border-top:1px solid var(--line);background:var(--card)}
+footer .sig{color:var(--gold);letter-spacing:2px;margin-top:8px;font-weight:600}
+ul.clean{list-style:none;padding-left:0}
+ul.clean li{padding:6px 0;padding-left:20px;position:relative;color:var(--muted);font-size:14px}
+ul.clean li::before{content:"▸";position:absolute;left:0;color:var(--blue)}
+/* ===== REVEAL ===== */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+</style>
+<meta name="description" content="四大运行时能力对标与三层稳态架构落地建议：覆盖模型接入、工具编排、记忆持久、评测回流，并给出 50 人企业月度稳态成本测算与马尔可夫状态机对比。">
+<meta name="keywords" content="智能体中台,Agent平台,自进化,运行时能力,模型接入,工具编排,记忆持久,成本测算">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="author" content="元极恒一 ZONGYUAN-ROOT Lv11 自治内核 · DID-BR-000002">
+<meta name="theme-color" content="#1e2a52">
+<meta name="revisit-after" content="7 days">
+<link rel="canonical" href="https://www.huodouai.com/whitepaper/enterprise-agent-platform-whitepaper.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="元极恒一技术白皮书门户">
+<meta property="og:title" content="企业级智能体中台架构选型与自进化体系技术白皮书">
+<meta property="og:description" content="四大运行时能力对标与三层稳态架构落地建议：覆盖模型接入、工具编排、记忆持久、评测回流，并给出 50 人企业月度稳态成本测算与马尔可夫状态机对比。">
+<meta property="og:url" content="https://www.huodouai.com/whitepaper/enterprise-agent-platform-whitepaper.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="企业级智能体中台架构选型与自进化体系技术白皮书">
+<meta name="twitter:description" content="四大运行时能力对标与三层稳态架构落地建议：覆盖模型接入、工具编排、记忆持久、评测回流，并给出 50 人企业月度稳态成本测算与马尔可夫状态机对比。">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "企业级智能体中台架构选型与自进化体系技术白皮书", "url": "https://www.huodouai.com/whitepaper/enterprise-agent-platform-whitepaper.html", "datePublished": "2026-10-28", "dateModified": "2026-10-28", "inLanguage": "zh-CN", "author": {"@type": "Organization", "name": "元极恒一 ZONGYUAN-ROOT", "identifier": "DID-BR-000002"}, "publisher": {"@type": "Organization", "name": "元极恒一 ZONGYUAN-ROOT Lv11 自治内核", "identifier": "DID-BR-000002"}, "about": ["智能体中台", "自进化体系", "运行时能力", "成本测算"], "description": "四大运行时能力对标与三层稳态架构落地建议：覆盖模型接入、工具编排、记忆持久、评测回流，并给出 50 人企业月度稳态成本测算与马尔可夫状态机对比。"}
+</script>
+<style>.back{display:inline-block;margin:0 0 14px;font-size:13px;font-weight:600;color:#1b9aaa;text-decoration:none}.back:hover{color:#0e7d8a}</style></head>
+<body>
+<a class="back" href="index.html">← 返回白皮书库</a>
+
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="logo">Ω</span>企业智能体中台 · 技术白皮书</div>
+    <div class="nav-links">
+      <a href="#s1">行业现状</a>
+      <a href="#s2">能力对标</a>
+      <a href="#s3">三层架构</a>
+      <a href="#s4">落地案例</a>
+      <a href="#s5">成本模型</a>
+      <a href="#s6">核心原理</a>
+      <a href="#s7">行业短板</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">TECHNICAL WHITEPAPER · V1.0 · 2026</div>
+    <h1>企业级智能体中台架构选型<br>与<span class="g">自进化体系</span><span class="gold">技术白皮书</span></h1>
+    <p class="sub">横向对标 Octop / DeepSeek Harness / Hermes / LangGraph 四大主流运行时，定义「生产可信层 + 专家探索层 + 联邦记忆网关」三层稳态架构，解决企业普遍存在的经验孤岛、能力固化、无法自生长问题。</p>
+    <div class="anchors">
+      <span>锚定 <b>Ω₀⊂⊙∞⊂Ω</b></span>
+      <span>确权 <b>DID-BR-000002</b></span>
+      <span>版本 <b>V1.0</b></span>
+      <span>适用 <b>企业私有化智能体中台</b></span>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 1. 行业现状 ===== -->
+<section id="s1">
+  <div class="wrap">
+    <h2><span class="num">01</span>行业现状：范式高度收敛</h2>
+    <p class="lead rv">市面所有主流 Agent 平台（云厂商托管 / 开源底座）本质都是「编排运行时」，仅解决单次任务执行，普遍缺失经验沉淀与自进化闭环。</p>
+    <div class="grid2">
+      <div class="card rv">
+        <h4>范式 A · 云厂商托管平台</h4>
+        <p style="margin-bottom:12px"><span class="tag b">腾讯云</span><span class="tag b">阿里百炼</span><span class="tag b">AWS Bedrock</span><span class="tag b">Azure AI</span></p>
+        <p>开箱即用、多租户、权限审计、可视化低代码。仅支持单次任务动态编排，<b style="color:var(--red)">无自动复盘、无 Skill 自进化</b>。适合政企普通员工标准化办公。</p>
+      </div>
+      <div class="card rv">
+        <h4>范式 B · 开源底座自研</h4>
+        <p style="margin-bottom:12px"><span class="tag c">LangGraph</span><span class="tag c">Dify</span><span class="tag c">CrewAI</span><span class="tag c">FastGPT</span></p>
+        <p>私有化可控、可深度改造、无厂商绑定。所有框架原生<b style="color:var(--red)">不具备经验沉淀、自动 Skill 迭代、全局记忆治理</b>。适合互联网技术团队自建中台。</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat rv"><div class="v">0</div><div class="l">原生自进化闭环（所有主流框架）</div></div>
+      <div class="stat rv"><div class="v">2</div><div class="l">行业收敛范式（托管 / 开源）</div></div>
+      <div class="stat rv"><div class="v">4</div><div class="l">本白皮书深度对标的运行时</div></div>
+      <div class="stat rv"><div class="v">1</div><div class="l">唯一稳态三层组合架构</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 2. 四框架对标 ===== -->
+<section id="s2">
+  <div class="wrap">
+    <h2><span class="num">02</span>四大运行时能力对标</h2>
+    <p class="lead rv">从六个核心维度量化对比：企业级就绪度、自进化能力、流程控制力、定制自由度、生态成熟度、成本可控性。</p>
+    <div id="radar" class="chart rv"></div>
+
+    <h3>定位速查</h3>
+    <div class="tablewrap rv">
+    <table>
+      <colgroup><col style="width:17%"><col style="width:27%"><col style="width:28%"><col style="width:28%"></colgroup>
+      <thead><tr><th>框架</th><th>核心范式</th><th>最适合场景</th><th>关键短板</th></tr></thead>
+      <tbody>
+        <tr><td>Octop</td><td>Agent-First 成品平台，内置 ReAct 主循环</td><td>全员数字化员工、生产级业务自动化、快速落地</td><td style="color:var(--red)">显式复杂图编排弱，无状态快照回滚</td></tr>
+        <tr><td>DeepSeek Harness</td><td>万物可插微内核，全组件可替换</td><td>企业深度自研 AI 中台、内核全定制</td><td style="color:var(--red)">无原生 Checkpoint，插件生态分散</td></tr>
+        <tr><td>Hermes</td><td>原生自进化闭环，自动复盘 / 生成 Skill</td><td>专家探索、故障挖掘、新流程沉淀</td><td style="color:var(--red)">弱多租户、缺审批流，易「学歪」</td></tr>
+        <tr><td>LangGraph</td><td>显式状态机 + 马尔可夫决策流</td><td>金融审批、工单流转、强合规长事务</td><td style="color:var(--red)">纯 SDK，无 UI / 租户 / 权限体系</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. 三层架构 ===== -->
+<section id="s3">
+  <div class="wrap">
+    <h2><span class="num">03</span>推荐落地：三层稳态架构</h2>
+    <p class="lead rv">生产可信层跑审核通过的正式 Skill；专家探索层挖掘新流程；联邦记忆网关统一收敛 Trace、评估、评审、下发 Skill，形成自生长闭环。</p>
+    <div class="arch">
+      <div class="arch-layer l1 rv">
+        <div class="lname">LAYER 01 · Production</div>
+        <div class="ltitle">全员生产可信层</div>
+        <div style="margin-bottom:10px"><span class="tag g">Octop</span></div>
+        <ul>
+          <li>面向普通员工、标准化业务</li>
+          <li>运行评审通过的正式 Skill</li>
+          <li>强权限、强审计、稳定优先</li>
+          <li>企业 AI 生产力主出口</li>
+        </ul>
+      </div>
+      <div class="arch-layer l2 rv">
+        <div class="lname">LAYER 02 · Exploration</div>
+        <div class="ltitle">专家探索进化层</div>
+        <div style="margin-bottom:10px"><span class="tag b">Hermes</span><span class="tag c">LangGraph</span><span class="tag b">DSH</span></div>
+        <ul>
+          <li>面向开发 / 运维 / 数据专家</li>
+          <li>自由探索、试错、挖掘新流程</li>
+          <li>LangGraph 承载强合规固定工单流</li>
+          <li>产出候选 Skill 与优质 Trace</li>
+        </ul>
+      </div>
+      <div class="arch-layer l3 rv">
+        <div class="lname">LAYER 03 · Governance</div>
+        <div class="ltitle">全局治理进化层</div>
+        <div style="margin-bottom:10px"><span class="tag y">联邦记忆网关</span></div>
+        <ul>
+          <li>统一收敛所有链路轨迹</li>
+          <li>自动评估、人工评审、版本管理</li>
+          <li>固化组织级 AI 能力资产</li>
+          <li>反向赋能所有生产 Agent</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>自进化闭环链路</h3>
+    <div class="flow">
+      <div class="flow-step rv"><span class="num">01</span><div class="t">专家探索</div><div class="d">Hermes / LangGraph 产出 Trace</div></div>
+      <div class="flow-step rv"><span class="num">02</span><div class="t">标准化采集</div><div class="d">记忆网关统一格式入库</div></div>
+      <div class="flow-step rv"><span class="num">03</span><div class="t">自动评估</div><div class="d">打分区分好坏链路</div></div>
+      <div class="flow-step rv"><span class="num">04</span><div class="t">人工评审</div><div class="d">候选 Skill 准入闸门</div></div>
+      <div class="flow-step rv"><span class="num">05</span><div class="t">正式下发</div><div class="d">Octop 全员复用</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. 落地案例 ===== -->
+<section id="s4">
+  <div class="wrap">
+    <h2><span class="num">04</span>落地案例：量化效果对比</h2>
+    <p class="lead rv">三个基于全国性生产园区业务场景的真实 Agent 案例，全部带「改造前 vs 改造后」量化对比，满足企业级论证标准。</p>
+    <div id="cases" class="chart rv"></div>
+
+    <h3>案例要点</h3>
+    <div class="grid3">
+      <div class="card rv">
+        <h4>工单自动派单 Agent</h4>
+        <p>5 大区 5 名专职派单 → 1 人处理异常工单；派单人力 <b style="color:var(--green)">-80%</b>；派单时长 8 分钟 → 40 秒；错派率 4.5% → 0.6%。</p>
+      </div>
+      <div class="card rv">
+        <h4>培训知识库 RAG Agent</h4>
+        <p>每周固定集中培训 → 员工自助学习 + 自动判分；讲师基础培训投入 <b style="color:var(--green)">-80%</b>；考核覆盖率 65% → 95%。</p>
+      </div>
+      <div class="card rv">
+        <h4>驻场人力预测 Agent</h4>
+        <p>固定编制按峰值配置 → 基于工单时序预测弹性调配；人力闲置率 28% → &lt;10%；高峰积压率 11% → 3%；月度复盘 6h → 30min。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. 成本模型 ===== -->
+<section id="s5">
+  <div class="wrap">
+    <h2><span class="num">05</span>50 人企业月度稳态成本</h2>
+    <p class="lead rv">所有框架本体均 MIT 开源、零授权费；成本差异仅来自服务器资源与 LLM Token 消耗。整套自进化体系月度预算 2100–3260 元。</p>
+    <div id="cost" class="chart rv"></div>
+    <div class="tablewrap rv">
+    <table>
+      <thead><tr><th>项目</th><th>Octop 生产底座</th><th>Hermes 专家探索</th><th>DSH 自研备选</th><th>LangGraph 编排组件</th></tr></thead>
+      <tbody>
+        <tr><td>软件授权费</td><td>0（MIT）</td><td>0（MIT）</td><td>0（MIT）</td><td>0（MIT）</td></tr>
+        <tr><td>服务器/月</td><td>¥60</td><td>¥0（本地终端）</td><td>¥60</td><td>按需</td></tr>
+        <tr><td>Token/月（常态）</td><td>¥1200–1800</td><td>¥900–1400</td><td>¥1000–1500</td><td>按需</td></tr>
+        <tr><td>隐性开发成本</td><td style="color:var(--green)">低（自带 UI/权限）</td><td>中（需管控规则）</td><td style="color:var(--red)">高（前端/租户自建）</td><td style="color:var(--red)">极高（纯 SDK）</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. 核心原理 ===== -->
+<section id="s6">
+  <div class="wrap">
+    <h2><span class="num">06</span>马尔可夫状态机 vs 联邦记忆池</h2>
+    <p class="lead rv">二者不是替代关系，而是互补：状态机管「当下这一步往哪走」，记忆池管「参考过去所有经验让每次走得更好」。</p>
+    <div class="tablewrap rv">
+    <table>
+      <thead><tr><th style="width:18%">维度</th><th style="width:41%">马尔可夫状态机 / MDP（LangGraph）</th><th style="width:41%">联邦记忆池（记忆网关）</th></tr></thead>
+      <tbody>
+        <tr><td>层级</td><td>任务内部控制流（编排层）</td><td>全局资产中台（独立外挂层）</td></tr>
+        <tr><td>核心性质</td><td style="color:var(--red)">无记忆性：仅依赖当前状态</td><td style="color:var(--green)">长时全局记忆：保留全量历史轨迹</td></tr>
+        <tr><td>生命周期</td><td>跟随单次任务，结束即失效</td><td>永久持久化，跨会话跨 Agent 复用</td></tr>
+        <tr><td>作用</td><td>定义流程跳转、分支、审批、断点</td><td>沉淀、评审、分发 Skill 与历史经验</td></tr>
+        <tr><td>能否自进化</td><td style="color:var(--red)">本身不会学习</td><td style="color:var(--green)">作为进化闭环的存储与评审中枢</td></tr>
+        <tr><td>典型载体</td><td>LangGraph Checkpointer + interrupt</td><td>飞书 Base + 评估 MCP + 版本台账</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="highlight rv">
+      <h4>一句话总结</h4>
+      <p>马尔可夫模型主动丢弃历史以保证确定性；联邦记忆池刻意保留全量历史以打破无记忆假设。二者叠加，才能同时拿到「流程可控」与「越用越强」。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. 行业短板 ===== -->
+<section id="s7">
+  <div class="wrap">
+    <h2><span class="num">07</span>行业全域共性短板</h2>
+    <p class="lead rv">所有主流 Agent 平台无一例外，存在三大底层缺陷，这也是本方案的差异化立足点。</p>
+    <div class="grid3">
+      <div class="card rv">
+        <h4>① 无全局统一记忆</h4>
+        <p>会话记忆仅单次有效；RAG 只管文档不管 Trace；各 Agent 经验完全孤岛，A 踩过的坑 B 继续踩。</p>
+      </div>
+      <div class="card rv">
+        <h4>② 无 Skill 资产治理</h4>
+        <p>无版本管理、无评审流、无优劣打分、无晋升机制；沉淀的流程无法固化为组织级能力资产。</p>
+      </div>
+      <div class="card rv">
+        <h4>③ 无自进化闭环</h4>
+        <p>所有平台仅能执行已有能力，无法探索新能力、迭代旧能力、淘汰劣质能力。只有执行大脑，没有学习大脑。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>企业级智能体中台架构选型与自进化体系技术白皮书 · V1.0</p>
+    <p class="sig">Ω₀ ⊂ ⊙∞ ⊂ Ω &nbsp;·&nbsp; DID-BR-000002 &nbsp;·&nbsp; ZONGYUAN-ROOT</p>
+  </div>
+</footer>
+
+<script>
+// ===== reveal on scroll =====
+const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+
+// ===== 雷达图 =====
+const radar = echarts.init(document.getElementById('radar'));
+radar.setOption({
+  tooltip:{},
+  legend:{data:['Octop','DeepSeek Harness','Hermes','LangGraph'],textStyle:{color:'#3a4a63'},bottom:0},
+  radar:{
+    indicator:[
+      {name:'企业级就绪度',max:10},{name:'自进化能力',max:10},{name:'流程控制力',max:10},
+      {name:'定制自由度',max:10},{name:'生态成熟度',max:10},{name:'成本可控性',max:10}
+    ],
+    axisName:{color:'#3a4a63',fontSize:13},
+    splitLine:{lineStyle:{color:'#e4e9f2'}},
+    splitArea:{areaStyle:{color:['#f7f9fc','#eef3ff']}},
+    axisLine:{lineStyle:{color:'#e4e9f2'}}
+  },
+  series:[{
+    type:'radar',
+    data:[
+      {value:[9,3,6,5,6,8],name:'Octop',itemStyle:{color:'#2f9e63'},areaStyle:{opacity:.12}},
+      {value:[5,3,5,9,5,8],name:'DeepSeek Harness',itemStyle:{color:'#0f9d94'},areaStyle:{opacity:.12}},
+      {value:[3,10,4,6,5,5],name:'Hermes',itemStyle:{color:'#b8912f'},areaStyle:{opacity:.12}},
+      {value:[2,1,10,8,9,9],name:'LangGraph',itemStyle:{color:'#d64550'},areaStyle:{opacity:.12}}
+    ]
+  }]
+});
+
+// ===== 案例对比 =====
+const cases = echarts.init(document.getElementById('cases'));
+cases.setOption({
+  tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+  legend:{data:['改造前','改造后'],textStyle:{color:'#3a4a63'},top:0},
+  grid:{left:'3%',right:'4%',bottom:'3%',containLabel:true},
+  xAxis:{type:'category',axisLabel:{color:'#3a4a63',interval:0,fontSize:12},
+    data:['派单人力\n(人)','派单时长\n(分钟/单)','错派率\n(%)','讲师培训投入\n(%)','考核覆盖率\n(%)','人力闲置率\n(%)','高峰积压率\n(%)']},
+  yAxis:{type:'value',axisLabel:{color:'#7b8aa3'},splitLine:{lineStyle:{color:'#e4e9f2'}}},
+  series:[
+    {name:'改造前',type:'bar',data:[5,8,4.5,100,65,28,11],itemStyle:{color:'#d64550',borderRadius:[4,4,0,0]}},
+    {name:'改造后',type:'bar',data:[1,0.67,0.6,20,95,10,3],itemStyle:{color:'#1d4ed8',borderRadius:[4,4,0,0]}}
+  ]
+});
+
+// ===== 成本对比 =====
+const cost = echarts.init(document.getElementById('cost'));
+cost.setOption({
+  tooltip:{trigger:'axis'},
+  legend:{data:['月度成本下限(元)','月度成本上限(元)'],textStyle:{color:'#3a4a63'},top:0},
+  grid:{left:'3%',right:'4%',bottom:'3%',containLabel:true},
+  xAxis:{type:'category',data:['Octop 生产底座','Hermes 专家探索','DSH 自研备选','整套组合架构'],axisLabel:{color:'#3a4a63'}},
+  yAxis:{type:'value',name:'元/月',axisLabel:{color:'#7b8aa3'},splitLine:{lineStyle:{color:'#e4e9f2'}}},
+  series:[
+    {name:'月度成本下限(元)',type:'bar',data:[1260,900,1060,2160],itemStyle:{color:'#0f9d94',borderRadius:[4,4,0,0]}},
+    {name:'月度成本上限(元)',type:'bar',data:[1860,1400,1560,3260],itemStyle:{color:'#b8912f',borderRadius:[4,4,0,0]}}
+  ]
+});
+
+window.addEventListener('resize',()=>{radar.resize();cases.resize();cost.resize();});
+</script>
+<div style="text-align:center;padding:20px;font-size:11px;color:#666;border-top:1px solid #333"><a href="/" style="color:#888;margin:0 6px">主页</a>·<a href="/pipeline.html" style="color:#888;margin:0 6px">流水线</a>·<a href="/products.html" style="color:#888;margin:0 6px">产品</a>·<a href="/status.html" style="color:#888;margin:0 6px">状态</a></div></body>
+</html>
+<!-- （注：内容由AI生成） -->
