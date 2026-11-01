@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="AI稳态自治体系白皮书·三大核心架构可视化：AI稳态治理架构、四维数据治理架构、工具规范治理架构的结构解剖与协同闭环。">
+<title>AI稳态自治体系白皮书 · 三大核心架构可视化</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --ink:#1c2438; --muted:#5b667f;
+    --line:#e4e9f2; --navy:#1e2a52; --navy2:#2d3b6e;
+    --gold:#c9a227; --gold2:#e0bd4a;
+    --cyan:#1b9aaa;
+    --a:#4f46e5; --a2:#6366f1;   /* 治理 */
+    --b:#0d9488; --b2:#14b8a6;   /* 数据 */
+    --c:#d97706; --c2:#f59e0b;   /* 工具 */
+    --ok:#16a34a; --warn:#dc2626;
+    --shadow:0 6px 24px rgba(28,36,56,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  #progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--cyan));z-index:60;transition:width .2s}
+  /* layout */
+  .wrap{display:flex;max-width:1280px;margin:0 auto}
+  nav{
+    position:sticky;top:0;align-self:flex-start;height:100vh;width:260px;flex:0 0 260px;
+    overflow-y:auto;padding:28px 18px;border-right:1px solid var(--line);background:#fbfcfe;
+  }
+  nav h4{font-size:12px;letter-spacing:2px;color:var(--muted);margin:18px 8px 8px;text-transform:uppercase}
+  nav a{
+    display:block;padding:8px 12px;border-radius:8px;color:var(--muted);font-size:13.5px;
+    text-decoration:none;border-left:3px solid transparent;transition:.15s;
+  }
+  nav a:hover{background:#eef2fb;color:var(--navy)}
+  nav a.active{background:#eaeefc;color:var(--navy);border-left-color:var(--gold);font-weight:600}
+  main{flex:1;min-width:0;padding:0 40px 100px}
+  /* hero */
+  .hero{
+    position:relative;margin:0 -40px 40px;padding:64px 48px 52px;color:#fff;overflow:hidden;
+    background:radial-gradient(1200px 400px at 80% -10%,rgba(201,162,39,.35),transparent),
+               linear-gradient(135deg,var(--navy) 0%,#16203f 60%,#0e1730 100%);
+  }
+  .hero::after{content:"";position:absolute;inset:0;background:
+    radial-gradient(2px 2px at 20% 30%,rgba(255,255,255,.25),transparent),
+    radial-gradient(2px 2px at 70% 60%,rgba(255,255,255,.18),transparent),
+    radial-gradient(1.5px 1.5px at 45% 80%,rgba(255,255,255,.2),transparent);}
+  .hero>*{position:relative;z-index:1}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:1px;
+    background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px}
+  .badge .dot{width:8px;height:8px;border-radius:50%;background:var(--gold2);box-shadow:0 0 10px var(--gold2)}
+  .hero h1{font-size:30px;line-height:1.35;margin:18px 0 10px;font-weight:800}
+  .hero .sub{font-size:15px;color:#c9d3ea;max-width:760px}
+  .meta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+  .meta{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:12px;padding:12px 16px;min-width:160px}
+  .meta .k{font-size:11px;color:#9fb0d4;letter-spacing:1px}
+  .meta .v{font-size:14px;font-weight:700;margin-top:3px;color:#fff}
+  .axiom{margin-top:22px;display:inline-flex;flex-direction:column;gap:4px;font-size:13px;color:#e7ecf8;
+    background:rgba(201,162,39,.14);border:1px solid rgba(201,162,39,.4);border-radius:10px;padding:10px 16px}
+  .axiom b{color:var(--gold2)}
+  /* sections */
+  section{padding-top:46px;scroll-margin-top:20px}
+  h2{font-size:23px;font-weight:800;color:var(--navy);display:flex;align-items:center;gap:12px;margin-bottom:8px}
+  h2 .num{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;font-size:15px;flex:0 0 38px;box-shadow:var(--shadow)}
+  h3{font-size:17px;color:var(--navy2);margin:26px 0 12px;font-weight:700;padding-left:12px;border-left:4px solid var(--gold)}
+  .lead{color:var(--muted);max-width:900px;margin-bottom:18px}
+  p{margin:10px 0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:var(--shadow)}
+  .grid{display:grid;gap:16px}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:980px){.g2,.g3,.g4{grid-template-columns:1fr}nav{display:none}main{padding:0 18px 80px}.hero{margin:0 -18px 30px;padding:48px 22px}}
+  .pcard{border-left:4px solid var(--a);background:#fff;border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  .pcard h4{font-size:15px;color:var(--ink);margin-bottom:6px}
+  .pcard p{font-size:13.5px;color:var(--muted);margin:0}
+  .tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:6px;margin-bottom:8px}
+  .t-a{background:#eef0ff;color:var(--a)}.t-b{background:#e6faf6;color:var(--b)}.t-c{background:#fef3e2;color:var(--c)}
+  .tagk{background:#fff3d6;color:#9a7b16}
+  /* pyramid */
+  .pyramid{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0}
+  .plyr{width:100%;max-width:760px;text-align:center;color:#fff;padding:14px 10px;border-radius:10px;position:relative}
+  .plyr small{display:block;font-size:12px;opacity:.85;margin-top:4px;font-weight:400}
+  .plyr.l1{width:46%;background:linear-gradient(135deg,#312e81,#4338ca)}
+  .plyr.l2{width:64%;background:linear-gradient(135deg,#4338ca,#6366f1)}
+  .plyr.l3{width:82%;background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+  .plyr.l4{width:100%;background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+  .arrow-down{color:var(--muted);font-size:13px}
+  /* four-dim */
+  .dimwrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .dim{border-radius:12px;padding:16px 18px;color:#fff;box-shadow:var(--shadow)}
+  .dim h4{font-size:15px;margin-bottom:6px}
+  .dim p{font-size:13px;color:rgba(255,255,255,.9);margin:0}
+  .d1{background:linear-gradient(135deg,#0e7490,#0891b2)}
+  .d2{background:linear-gradient(135deg,#0d9488,#10b981)}
+  .d3{background:linear-gradient(135deg,#7c3aed,#8b5cf6)}
+  .d4{background:linear-gradient(135deg,#be123c,#e11d48)}
+  /* three-state stack */
+  .stack{display:flex;flex-direction:column;gap:0;max-width:820px;margin:0 auto}
+  .stlayer{border-radius:0;padding:18px 22px;color:#fff;position:relative;border-bottom:2px solid rgba(255,255,255,.25)}
+  .stlayer:first-child{border-radius:12px 12px 0 0}
+  .stlayer:last-child{border-radius:0 0 12px 12px;border-bottom:none}
+  .stlayer h4{font-size:16px;margin-bottom:4px}
+  .stlayer p{font-size:13px;color:rgba(255,255,255,.92);margin:0}
+  .stlayer .meta2{font-size:11.5px;margin-top:8px;opacity:.9}
+  .s1{background:linear-gradient(135deg,#b45309,#d97706)}
+  .s2{background:linear-gradient(135deg,#0369a1,#0ea5e9)}
+  .s3{background:linear-gradient(135deg,#334155,#475569)}
+  .starrow{text-align:center;color:var(--gold);font-weight:800;font-size:13px;padding:6px 0;background:#fff;border-left:1px solid var(--line);border-right:1px solid var(--line)}
+  /* dual track */
+  .tracks{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:8px}
+  .track{border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+  .track.h{background:linear-gradient(135deg,#1e293b,#334155);color:#fff}
+  .track.g{background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff}
+  .track h4{font-size:16px;margin-bottom:8px}
+  .track ul{list-style:none;font-size:13.5px}
+  .track li{padding:5px 0 5px 20px;position:relative}
+  .track li::before{content:"▸";position:absolute;left:0;opacity:.8}
+  /* timeline */
+  .tl{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:10px}
+  .tlc{border:1px solid var(--line);border-radius:12px;padding:16px;background:#fff;box-shadow:var(--shadow);position:relative}
+  .tlc .ph{display:inline-block;font-weight:800;font-size:13px;color:#fff;background:var(--navy);padding:3px 10px;border-radius:6px;margin-bottom:8px}
+  .tlc h4{font-size:15px;color:var(--navy2);margin-bottom:6px}
+  .tlc p{font-size:12.5px;color:var(--muted);margin:0}
+  @media(max-width:980px){.tl{grid-template-columns:1fr 1fr}.tracks,.dimwrap{grid-template-columns:1fr}}
+  /* loop */
+  .loopbox{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px}
+  .lob{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);font-size:13.5px;text-align:center;min-width:130px;color:var(--navy2);font-weight:600}
+  .lob small{display:block;font-weight:400;font-size:11.5px;color:var(--muted);margin-top:3px}
+  .loarr{color:var(--gold);font-size:20px;font-weight:800}
+  /* table */
+  table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+  th,td{border:1px solid var(--line);padding:11px 14px;text-align:left;vertical-align:top}
+  th{background:var(--navy);color:#fff;font-weight:700}
+  tr:nth-child(even) td{background:#fafbfe}
+  .yes{color:var(--ok);font-weight:700}.no{color:var(--warn);font-weight:700}
+  /* callout */
+  .callout{border:1px solid var(--gold);background:linear-gradient(135deg,#fffbe9,#fff7e0);border-radius:12px;padding:18px 20px;margin:16px 0}
+  .callout .ct{font-weight:800;color:#9a7b16;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .lock{border:1px solid var(--a);background:#f3f4ff;border-radius:12px;padding:18px 20px;margin:16px 0;font-size:13.5px;color:var(--navy2)}
+  .lock b{color:var(--a)}
+  ul.clean{list-style:none}.clean li{padding:6px 0 6px 20px;position:relative;font-size:14px}
+  .clean li::before{content:"●";position:absolute;left:0;color:var(--gold);font-size:10px;top:9px}
+  .sixgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:980px){.sixgrid{grid-template-columns:1fr}}
+  .six{background:linear-gradient(135deg,#1e2a52,#2d3b6e);color:#fff;border-radius:12px;padding:16px 18px;box-shadow:var(--shadow)}
+  .six h4{font-size:15px;margin-bottom:5px;color:var(--gold2)}
+  .six p{font-size:12.5px;color:#cdd6ec;margin:0}
+  footer{margin-top:60px;padding:30px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px;background:#fbfcfe}
+  footer b{color:var(--navy)}
+  .kpis{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0}
+  .kpi{flex:1;min-width:140px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow);text-align:center}
+  .kpi .n{font-size:26px;font-weight:800;color:var(--navy)}
+  .kpi .l{font-size:12px;color:var(--muted);margin-top:4px}
+  .toggle{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .toggle button{border:1px solid var(--line);background:#fff;color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer;font-size:13.5px;font-weight:600;transition:.15s}
+  .toggle button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .archpanel{display:none}.archpanel.show{display:block}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<div class="wrap">
+  <nav id="nav">
+    <h4>章节导航</h4>
+    <a href="#s1">1 执行摘要</a>
+    <a href="#s2">2 问题背景</a>
+    <a href="#s3">3 架构总览</a>
+    <a href="#s4">4 架构一 · AI稳态治理</a>
+    <a href="#s5">5 架构二 · 四维数据治理</a>
+    <a href="#s6">6 架构三 · 工具规范治理</a>
+    <a href="#s7">7 三架构协同闭环</a>
+    <a href="#s8">8 稳态判据与结语</a>
+  </nav>
+  <main>
+    <div class="hero">
+      <span class="badge"><span class="dot"></span>元极恒一 · 技术白皮书 · No.22</span>
+      <h1>AI稳态自治体系白皮书<br>三大核心架构可视化</h1>
+      <div class="sub">以三大核心架构的 结构解剖 × 可视化解析 为主线，阐述 AI 稳态自治体系如何以「规则大于人治」的机制约束，让企业 AI 从「能力生成」走向「可信稳态」。</div>
+      <div class="meta-row">
+        <div class="meta"><div class="k">系列</div><div class="v">元极恒一 · 稳态自治</div></div>
+        <div class="meta"><div class="k">版本</div><div class="v">V1.0 · 可视化版</div></div>
+        <div class="meta"><div class="k">日期</div><div class="v">2026年11月02日</div></div>
+        <div class="meta"><div class="k">方法论</div><div class="v">外置解耦 · 只增不覆盖</div></div>
+      </div>
+      <div class="axiom"><span><b>体系公理</b>：客观记录优先于主观判断；无证据不入正账；近似必须声明。</span></div>
+    </div>
+
+    <section id="s1">
+      <h2><span class="num">1</span>执行摘要</h2>
+      <p class="lead">AI 稳态自治体系的命题：企业 AI 规模化落地的瓶颈不在「能力生成」，而在「可信稳态」。本白皮书将体系拆解为三大核心架构，逐层可视化解剖。</p>
+      <div class="grid g3">
+        <div class="pcard" style="border-left-color:var(--a)"><span class="tag t-a">架构一</span><h4>AI稳态治理架构</h4><p>全局裁决内核：元规则基线、真值网关双层校验、全链路审计存证——企业 AI 的「内部法律」与「终审法院」。</p></div>
+        <div class="pcard" style="border-left-color:var(--b)"><span class="tag t-b">架构二</span><h4>四维数据治理架构</h4><p>全域资产底座：统一资产目录、权限隔离、血缘追踪、冷热分层——数据资产从散碎走向有序。</p></div>
+        <div class="pcard" style="border-left-color:var(--c)"><span class="tag t-c">架构三</span><h4>工具规范治理架构</h4><p>三态正交执行层：工具接入标准化、长任务自治管控、执行纪律门禁——Agent 从「各自为政」走向「同一纪律」。</p></div>
+      </div>
+      <p>三大架构相互独立、互不越权：治理架构裁决「对不对」，数据架构管住「有什么」，工具架构约束「怎么做」。任何一层都不替其他层做决定，这正是体系可持续进化的前提。</p>
+    </section>
+
+    <section id="s2">
+      <h2><span class="num">2</span>问题背景：为什么需要三大架构</h2>
+      <p class="lead">主流技术供给集中在能力生成——更强的模型、更全的知识库、更灵活的搭建工具。但企业规模化落地时，四类结构性问题反复出现：</p>
+      <div class="grid g2">
+        <div class="card"><h3 style="margin-top:0">结果漂移</h3><p style="font-size:13.5px;color:var(--muted)">同一问题不同时间输出不一致，强口径场景（风控、报价、质检）无法验收。</p></div>
+        <div class="card"><h3 style="margin-top:0">合规难审计</h3><p style="font-size:13.5px;color:var(--muted)">出了问题无法定位是模型、规则还是知识库的原因，一句「模型幻觉」无法向内控交代。</p></div>
+        <div class="card"><h3 style="margin-top:0">编排混乱</h3><p style="font-size:13.5px;color:var(--muted)">各业务线 Agent 各自维护提示词规则，口径互相打架，无法复用。</p></div>
+        <div class="card"><h3 style="margin-top:0">资产散碎</h3><p style="font-size:13.5px;color:var(--muted)">向量库、文档、工具能力散落各项目，重复建设，血缘不清。</p></div>
+      </div>
+      <p>共同根源：企业缺少一个<strong>独立于模型与业务系统的约束与裁决层</strong>。三大核心架构就是这一约束层的三根支柱。</p>
+    </section>
+
+    <section id="s3">
+      <h2><span class="num">3</span>架构总览：一图看懂三层分工</h2>
+      <p class="lead">三大架构呈「裁决在上、资产居中、执行在下」的正交分层，上层不感知底层差异，下层不越权上层决策。</p>
+      <div class="card">
+        <svg viewBox="0 0 860 300" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="ga" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#6366f1"/></linearGradient>
+            <linearGradient id="gb" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#14b8a6"/></linearGradient>
+            <linearGradient id="gc" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d97706"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+          </defs>
+          <rect x="30" y="24" width="800" height="66" rx="12" fill="url(#ga)"/>
+          <text x="55" y="52" fill="#fff" font-size="17" font-weight="700">架构一 · AI稳态治理架构（全局裁决内核）</text>
+          <text x="55" y="75" fill="#e0e7ff" font-size="12.5">元规则基线 · 真值网关 · 审计存证 —— 裁决「对不对」</text>
+          <rect x="30" y="114" width="800" height="66" rx="12" fill="url(#gb)"/>
+          <text x="55" y="142" fill="#fff" font-size="17" font-weight="700">架构二 · 四维数据治理架构（全域资产底座）</text>
+          <text x="55" y="165" fill="#ccfbf1" font-size="12.5">统一目录 · 权限 · 血缘 · 冷热分层 —— 管住「有什么」</text>
+          <rect x="30" y="204" width="800" height="66" rx="12" fill="url(#gc)"/>
+          <text x="55" y="232" fill="#fff" font-size="17" font-weight="700">架构三 · 工具规范治理架构（三态正交执行层）</text>
+          <text x="55" y="255" fill="#fef3c7" font-size="12.5">标准化接入 · 长任务管控 · 执行纪律门禁 —— 约束「怎么做」</text>
+          <text x="430" y="296" fill="#5b667f" font-size="12" text-anchor="middle">瘦应用层（知识库 RAG · 3D 生成 · 企业 Agent）不感知底层差异，全部经三大架构统一约束</text>
+        </svg>
+        <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">图 1 · 三大核心架构正交分层总览</p>
+      </div>
+    </section>
+
+    <section id="s4">
+      <h2><span class="num">4</span>架构一 · AI稳态治理架构（全局裁决内核）</h2>
+      <p class="lead">治理架构回答一个问题：体系忠于谁、什么算对。答案是机制，不是承诺。</p>
+      <div class="pyramid">
+        <div class="plyr l1">基础章程 · 交付即固化<small>客观记录优先 · 只增不覆盖 · 全程可追溯，任何实例不得修改</small></div>
+        <div class="plyr l2">治理条款 · 企业定制<small>管理方称谓 · 审批权限 · 品牌命名 · 部署域名，由企业行使唯一修订权</small></div>
+        <div class="plyr l3">执行门禁 · 双层校验<small>输出前对照元规则前置约束；输出后对照真值基线结果裁决</small></div>
+      </div>
+      <p style="text-align:center;font-size:12px;color:var(--muted);margin:8px 0 16px">图 2 · 治理架构三层金字塔：章程固化 → 条款定制 → 门禁执行</p>
+      <div class="grid g2">
+        <div class="card"><h3 style="margin-top:0">元规则基线</h3><p style="font-size:13.5px;color:var(--muted)">业务规则沉淀为可版本管理的规则资产：一处修改、全链路统一生效，支持回滚与变更对比，杜绝不同智能体口径打架。</p></div>
+        <div class="card"><h3 style="margin-top:0">真值网关</h3><p style="font-size:13.5px;color:var(--muted)">前置校验拦越界意图，后置校验裁结果偏差；对强口径场景构建 Golden 真值基线，做收敛校验与分歧仲裁。</p></div>
+        <div class="card"><h3 style="margin-top:0">审计存证</h3><p style="font-size:13.5px;color:var(--muted)">全部请求、规则调用与裁决日志以 Merkle 结构存证，防篡改、可回放，问题定位精确到具体层。</p></div>
+        <div class="card"><h3 style="margin-top:0">升级闸口</h3><p style="font-size:13.5px;color:var(--muted)">仲裁不了的分歧不硬裁，升级至企业授权管理方终审——人是体系的终止符，机器不僭越。</p></div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <h2><span class="num">5</span>架构二 · 四维数据治理架构（全域资产底座）</h2>
+      <p class="lead">数据架构回答另一个问题：体系有什么、从哪来、归谁管。四个维度把散碎资产收敛为有序底座。</p>
+      <div class="grid g4">
+        <div class="pcard" style="border-left-color:var(--b)"><h4>统一目录</h4><p>存量向量库、文档库、Agent 与提示词全部入册，一份账本管到底。</p></div>
+        <div class="pcard" style="border-left-color:var(--b)"><h4>权限隔离</h4><p>按业务域与角色切分访问边界，敏感资产默认最小可见。</p></div>
+        <div class="pcard" style="border-left-color:var(--b)"><h4>血缘追踪</h4><p>每个资产的来源、加工链路与引用关系全程留痕，可回溯到源头。</p></div>
+        <div class="pcard" style="border-left-color:var(--b)"><h4>冷热分层</h4><p>高频资产热存加速，低频资产冷存归档，成本与性能兼得。</p></div>
+      </div>
+      <p>四维治理的关键取舍是<strong>「兼容存量」</strong>：不推翻企业已有投资，先入册、再治理、后优化。版本管理遵循只增不覆盖——历史版本永远可考，纠错以新记录声明。</p>
+    </section>
+
+    <section id="s6">
+      <h2><span class="num">6</span>架构三 · 工具规范治理架构（三态正交执行层）</h2>
+      <p class="lead">工具架构回答第三个问题：体系怎么做事、做事的纪律是什么。三种执行状态正交隔离，互不污染。</p>
+      <div class="card">
+        <svg viewBox="0 0 860 210" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+          <rect x="30" y="20" width="250" height="150" rx="12" fill="#eef0ff" stroke="#4f46e5" stroke-width="1.5"/>
+          <text x="155" y="55" fill="#4f46e5" font-size="15" font-weight="700" text-anchor="middle">静态态 · 资产注册</text>
+          <text x="155" y="85" fill="#5b667f" font-size="12" text-anchor="middle">工具能力入册编目</text>
+          <text x="155" y="108" fill="#5b667f" font-size="12" text-anchor="middle">指纹锁定 · 版本留痕</text>
+          <rect x="305" y="20" width="250" height="150" rx="12" fill="#e6faf6" stroke="#0d9488" stroke-width="1.5"/>
+          <text x="430" y="55" fill="#0d9488" font-size="15" font-weight="700" text-anchor="middle">运行态 · 自治管控</text>
+          <text x="430" y="85" fill="#5b667f" font-size="12" text-anchor="middle">长任务三级拆解 · 检查点快照</text>
+          <text x="430" y="108" fill="#5b667f" font-size="12" text-anchor="middle">三道熔断：步数/调用次数/时长</text>
+          <rect x="580" y="20" width="250" height="150" rx="12" fill="#fef3e2" stroke="#d97706" stroke-width="1.5"/>
+          <text x="705" y="55" fill="#d97706" font-size="15" font-weight="700" text-anchor="middle">复盘态 · 回测校准</text>
+          <text x="705" y="85" fill="#5b667f" font-size="12" text-anchor="middle">执行记录留痕入账</text>
+          <text x="705" y="108" fill="#5b667f" font-size="12" text-anchor="middle">同类问题二现回测 · 判据沉淀</text>
+          <text x="430" y="198" fill="#5b667f" font-size="12" text-anchor="middle">三态正交：注册不改运行、运行不扰复盘、复盘反哺注册</text>
+        </svg>
+        <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">图 3 · 工具规范治理三态正交执行层</p>
+      </div>
+      <p>工具接入遵循标准化流水线：业务团队只定义目标，工具调度、结果校验、闭环评测由执行层统一完成。熔断即停、断点可续，长任务失控风险被机制性压住。</p>
+    </section>
+
+    <section id="s7">
+      <h2><span class="num">7</span>三大架构协同闭环</h2>
+      <p class="lead">三大架构不是三座孤岛，而是一条闭环：数据架构供给原料，工具架构执行动作，治理架构终审裁决，裁决结果反哺规则与资产。</p>
+      <div class="card">
+        <svg viewBox="0 0 860 170" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">
+          <defs><marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#9a7b16"/></marker></defs>
+          <rect x="40" y="45" width="200" height="70" rx="12" fill="#e6faf6" stroke="#0d9488" stroke-width="2"/>
+          <text x="140" y="78" fill="#0d9488" font-size="14.5" font-weight="700" text-anchor="middle">数据架构</text>
+          <text x="140" y="100" fill="#5b667f" font-size="11.5" text-anchor="middle">供给可信原料</text>
+          <rect x="330" y="45" width="200" height="70" rx="12" fill="#fef3e2" stroke="#d97706" stroke-width="2"/>
+          <text x="430" y="78" fill="#d97706" font-size="14.5" font-weight="700" text-anchor="middle">工具架构</text>
+          <text x="430" y="100" fill="#5b667f" font-size="11.5" text-anchor="middle">按纪律执行</text>
+          <rect x="620" y="45" width="200" height="70" rx="12" fill="#eef0ff" stroke="#4f46e5" stroke-width="2"/>
+          <text x="720" y="78" fill="#4f46e5" font-size="14.5" font-weight="700" text-anchor="middle">治理架构</text>
+          <text x="720" y="100" fill="#5b667f" font-size="11.5" text-anchor="middle">终审与存证</text>
+          <line x1="245" y1="80" x2="322" y2="80" stroke="#9a7b16" stroke-width="2.5" marker-end="url(#arr)"/>
+          <line x1="535" y1="80" x2="612" y2="80" stroke="#9a7b16" stroke-width="2.5" marker-end="url(#arr)"/>
+          <path d="M 720 122 C 720 165, 140 165, 140 122" fill="none" stroke="#9a7b16" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arr)"/>
+          <text x="430" y="160" fill="#9a7b16" font-size="11.5" text-anchor="middle">裁决结果反哺：规则修订 → 资产更新 → 执行校准</text>
+        </svg>
+        <p style="text-align:center;font-size:12px;color:var(--muted);margin-top:8px">图 4 · 三大架构协同闭环：执行—裁决—反哺</p>
+      </div>
+      <p>该闭环的实证基线：体系内裁决内核已通过五十四项回归用例全绿验证，真值上报链路按「全域采集 → 候选池 → 内核提炼 → 公理网关裁决 → 待审上报」五环运转，每个环节留痕可溯。</p>
+    </section>
+
+    <section id="s8" style="padding-bottom:10px">
+      <h2><span class="num">8</span>稳态判据与结语</h2>
+      <div class="card">
+        <h3 style="margin-top:0">稳态判据</h3>
+        <ul style="font-size:14px;color:var(--muted);padding-left:22px">
+          <li style="margin:6px 0">同一问题跨时间、跨 Agent 输出口径一致（语义稳态）；</li>
+          <li style="margin:6px 0">任何裁决可回放到具体规则版本与数据版本（可审计）；</li>
+          <li style="margin:6px 0">任何变更只增不覆盖、可回滚（可进化且不翻烧饼）；</li>
+          <li style="margin:6px 0">机器裁不了的分歧有明确的人类终止符（权责闭环）。</li>
+        </ul>
+      </div>
+      <p>三大核心架构的共同哲学只有一句话：<strong>规则大于人治，机制先于承诺</strong>。体系忠于谁、什么算对、怎么做事，都由写进章程的机制保证，而不是供应商的口头承诺——这就是 AI 从「能生成」走到「可信耐」的全部秘密。</p>
+      <p style="font-size:12.5px;color:var(--muted)">诚实声明：本白皮书所述架构已在体系参考实现中在线运行并持续验证；面向企业的标准化交付工具链在建设中，合作模式由双方商务洽谈确立，本页不作商业承诺。</p>
+    </section>
+
+    <footer>
+      <p>元极恒一 · AI稳态自治体系技术白皮书 No.22 ｜ 归属 火斗云智AIOS ｜ 粤ICP备2026035657号</p>
+    </footer>
+  </main>
+</div>
+<script>
+  const prog=document.getElementById('progress'),sections=[...document.querySelectorAll('section')],navLinks=[...document.querySelectorAll('nav a')];
+  function onScroll(){
+    const h=document.documentElement;
+    const sc=h.scrollTop/(h.scrollHeight-h.clientHeight);
+    prog.style.width=(sc*100)+'%';
+    let cur=sections[0].id;
+    for(const s of sections){ if(s.getBoundingClientRect().top<=120) cur=s.id; }
+    navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+</script>
+</body>
+</html>
