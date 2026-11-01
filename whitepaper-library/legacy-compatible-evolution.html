@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企业AI全域治理 · 存量兼容演进最优稳态</title>
+<style>
+  :root{
+    --bg:#f4f6fb; --panel:#ffffff; --ink:#1c2430; --sub:#5a6678; --line:#e3e8f0;
+    --blue:#2f6df0; --blue-l:#e8f0ff; --teal:#0fa3a3; --teal-l:#e2f6f6;
+    --purple:#7b5cf0; --purple-l:#efe9ff; --amber:#e8930c; --amber-l:#fdf2dc;
+    --red:#e0533d; --green:#27a567; --slate:#334155;
+    --shadow:0 4px 18px rgba(28,36,48,.07); --shadow-h:0 8px 28px rgba(47,109,240,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"PingFang SC","Microsoft YaHei",-apple-system,"Segoe UI",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px 80px}
+  /* HERO */
+  .hero{background:linear-gradient(135deg,#1b2a4e 0%,#2f4a86 55%,#2f6df0 100%);
+    color:#fff;padding:54px 22px 46px;position:relative;overflow:hidden}
+  .hero:after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;
+    border:1px solid rgba(255,255,255,.12);border-radius:50%;}
+  .hero .dna{position:absolute;right:40px;bottom:-30px;font-size:46px;opacity:.10;font-weight:800;letter-spacing:4px}
+  .hero .tag{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);
+    padding:4px 13px;border-radius:30px;font-size:12.5px;margin-bottom:16px;letter-spacing:1px}
+  .hero h1{font-size:33px;font-weight:800;letter-spacing:1px;margin-bottom:10px}
+  .hero .meta{display:flex;flex-wrap:wrap;gap:10px 26px;margin-top:18px;font-size:13.5px;color:#dce6ff}
+  .hero .meta b{color:#fff;font-weight:600}
+  .hero .axiom{margin-top:22px;background:rgba(0,0,0,.18);border-left:3px solid #7cc0ff;
+    padding:11px 16px;border-radius:6px;font-size:13.5px;color:#eaf1ff}
+  /* SECTIONS */
+  .sec{margin-top:42px}
+  .sec-h{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .sec-h .n{background:var(--ink);color:#fff;width:34px;height:34px;border-radius:9px;
+    display:grid;place-items:center;font-weight:800;font-size:15px;flex:none}
+  .sec-h h2{font-size:21px;font-weight:800;letter-spacing:.5px}
+  .sec-h .en{color:var(--sub);font-size:12.5px;font-weight:500;margin-left:auto}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px;box-shadow:var(--shadow)}
+  /* 3 ARCH OVERVIEW */
+  .tri{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .arch{border-radius:14px;padding:22px 20px;border:1px solid var(--line);background:var(--panel);
+    box-shadow:var(--shadow);position:relative;overflow:hidden;transition:.22s}
+  .arch:hover{transform:translateY(-4px);box-shadow:var(--shadow-h)}
+  .arch .bar{position:absolute;top:0;left:0;right:0;height:5px}
+  .arch.a1 .bar{background:var(--blue)} .arch.a2 .bar{background:var(--teal)} .arch.a3 .bar{background:var(--purple)}
+  .arch .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:23px;margin-bottom:12px}
+  .arch.a1 .ic{background:var(--blue-l)} .arch.a2 .ic{background:var(--teal-l)} .arch.a3 .ic{background:var(--purple-l)}
+  .arch h3{font-size:17px;font-weight:800;margin-bottom:3px}
+  .arch .role{font-size:12.5px;color:var(--sub);margin-bottom:12px}
+  .arch ul{list-style:none;font-size:13px;color:var(--slate)}
+  .arch ul li{padding:5px 0 5px 16px;position:relative;border-top:1px dashed var(--line)}
+  .arch ul li:before{content:"";position:absolute;left:0;top:13px;width:6px;height:6px;border-radius:50%}
+  .arch.a1 ul li:before{background:var(--blue)} .arch.a2 ul li:before{background:var(--teal)} .arch.a3 ul li:before{background:var(--purple)}
+  /* PYRAMID (AI稳态治理) */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .pyr{display:flex;flex-direction:column;align-items:center;gap:9px}
+  .pyr .lvl{width:100%;text-align:center;border-radius:10px;padding:13px 10px;color:#fff;position:relative;cursor:default;
+    transition:.2s;font-size:14px}
+  .pyr .lvl:hover{filter:brightness(1.07)}
+  .pyr .lvl small{display:block;font-size:11.5px;font-weight:400;opacity:.9;margin-top:2px}
+  .pyr .l0{width:100%;background:#1b2a4e}
+  .pyr .l1{width:84%;background:#2f4a86}
+  .pyr .l2{width:68%;background:#3a63b8}
+  .pyr .l3{width:52%;background:#5a86d8}
+  .pyr .arrow{color:var(--sub);font-size:11px}
+  /* 4D grid */
+  .dim4{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .dim{border-radius:13px;padding:18px 18px;border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow)}
+  .dim .dh{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .dim .dot{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;flex:none}
+  .dim h4{font-size:15.5px;font-weight:800}
+  .dim p{font-size:12.8px;color:var(--slate);line-height:1.6}
+  .dim.k1 .dot{background:var(--blue)} .dim.k2 .dot{background:var(--teal)} .dim.k3 .dot{background:var(--amber)} .dim.k4 .dot{background:var(--purple)}
+  /* 3-STATE STACK */
+  .state{display:flex;flex-direction:column;gap:0;align-items:center}
+  .st{border-radius:12px;padding:16px 22px;color:#fff;width:100%;max-width:560px;box-shadow:var(--shadow)}
+  .st h4{font-size:16px;font-weight:800} .st p{font-size:12.8px;opacity:.93;margin-top:3px}
+  .st.s1{background:linear-gradient(90deg,#7b5cf0,#9b7cf5)} .st.s2{background:linear-gradient(90deg,#3a63b8,#5a86d8)} .st.s3{background:linear-gradient(90deg,#334155,#54657d)}
+  .st-arr{color:var(--sub);font-size:13px;padding:7px 0;display:flex;align-items:center;gap:8px}
+  .st-arr .ln{width:60px;height:2px;background:var(--line)}
+  .st-note{font-size:12.5px;color:var(--sub);text-align:center;margin-top:10px;max-width:560px}
+  /* STRATEGY / DUAL TRACK */
+  .dual{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}
+  .track{border-radius:12px;padding:16px 18px;border:1px dashed var(--line);background:#fbfcfe}
+  .track.old{border-color:#e0c89a} .track.new{border-color:#bcd0f5}
+  .track h4{font-size:14.5px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+  .track.old h4:before{content:"◌";color:var(--amber)} .track.new h4:before{content:"◉";color:var(--blue)}
+  .track p{font-size:12.8px;color:var(--slate)}
+  .pstage{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .ps{border-radius:12px;padding:16px 14px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow);position:relative}
+  .ps .pn{font-size:12px;font-weight:800;color:#fff;display:inline-block;padding:2px 9px;border-radius:20px;margin-bottom:8px}
+  .ps.p0 .pn{background:var(--slate)} .ps.p1 .pn{background:var(--teal)} .ps.p2 .pn{background:var(--blue)} .ps.p3 .pn{background:var(--purple)}
+  .ps h4{font-size:14px;font-weight:800;margin-bottom:5px}
+  .ps p{font-size:12.3px;color:var(--sub);line-height:1.55}
+  /* ROADMAP TABLE */
+  table{width:100%;border-collapse:collapse;font-size:13px;background:var(--panel);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+  th{background:var(--ink);color:#fff;text-align:left;padding:12px 15px;font-weight:600;font-size:12.8px}
+  td{padding:12px 15px;border-top:1px solid var(--line);color:var(--slate);vertical-align:top}
+  tr:nth-child(even) td{background:#fafbfd}
+  td b{color:var(--ink)}
+  .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:700}
+  .pill.s0{background:var(--slate);color:#fff}.pill.s1{background:var(--teal-l);color:#0a7a7a}
+  .pill.s2{background:var(--blue-l);color:#1f4fc0}.pill.s3{background:var(--purple-l);color:#5a36c0}
+  /* TABS */
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .tab{border:1px solid var(--line);background:#fff;padding:9px 16px;border-radius:30px;font-size:13px;cursor:pointer;
+    font-weight:600;color:var(--sub);transition:.18s}
+  .tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .tab-body{display:none} .tab-body.on{display:block}
+  /* control items */
+  .ctrl{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .ci{border-radius:12px;padding:16px 18px;border:1px solid var(--line);background:var(--panel);box-shadow:var(--shadow)}
+  .ci h4{font-size:14px;font-weight:800;margin-bottom:5px;display:flex;align-items:center;gap:8px}
+  .ci h4 .ico{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:14px}
+  .ci p{font-size:12.6px;color:var(--sub)}
+  /* RULE 021 highlight */
+  .rule21{border:1px solid #cdd9f2;background:linear-gradient(135deg,#f5f8ff,#eef3ff);border-radius:14px;padding:22px 24px}
+  .rule21 .rh{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+  .rule21 .badge{background:var(--blue);color:#fff;font-size:12px;font-weight:800;padding:3px 11px;border-radius:8px}
+  .rule21 p{font-size:13.5px;color:var(--slate);margin-bottom:10px}
+  .rule21 ol{margin:0 0 0 20px;font-size:13px;color:var(--ink)}
+  .rule21 ol li{margin:6px 0}
+  .pulse{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .pulse .pp{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:12.3px;color:var(--slate);flex:1;min-width:150px}
+  .pulse .pp b{color:var(--ink);display:block;font-size:12px;margin-bottom:2px}
+  /* KPI steady */
+  .steady{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .kv{border-radius:12px;padding:16px 18px;background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow)}
+  .kv h4{font-size:13.5px;font-weight:800;color:var(--ink);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .kv ul{list-style:none;font-size:12.3px;color:var(--sub)}
+  .kv ul li{padding:4px 0 4px 15px;position:relative}
+  .kv ul li:before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:800}
+  .kv .x li:before{content:"✕";color:var(--red)}
+  .footer{margin-top:50px;text-align:center;color:var(--sub);font-size:12.5px;border-top:1px solid var(--line);padding-top:22px}
+  .footer .mark{font-weight:800;color:var(--ink);letter-spacing:2px}
+  @media(max-width:880px){
+    .tri,.grid2,.dim4,.dual,.pstage,.ctrl,.steady{grid-template-columns:1fr}
+    .pstage{gap:12px}
+  }
+</style>
+<meta name="description" content="不推翻原有业务、不停机改造、内核优化不扰动存量；通过旁路双轨与渐进式稳态演进方法论，给出企业 AI 治理体系从存量系统平滑迁移的最优路径。">
+<meta name="keywords" content="存量兼容,渐进式演进,双轨并行,不停机改造,AI治理演进,平滑迁移,稳态路径">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+<meta name="author" content="元极恒一 ZONGYUAN-ROOT Lv11 自治内核 · DID-BR-000002">
+<meta name="theme-color" content="#1e2a52">
+<meta name="revisit-after" content="7 days">
+<link rel="canonical" href="https://www.huodouai.com/whitepaper/legacy-compatible-evolution.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="元极恒一技术白皮书门户">
+<meta property="og:title" content="企业AI全域治理 · 存量兼容演进最优稳态">
+<meta property="og:description" content="不推翻原有业务、不停机改造、内核优化不扰动存量；通过旁路双轨与渐进式稳态演进方法论，给出企业 AI 治理体系从存量系统平滑迁移的最优路径。">
+<meta property="og:url" content="https://www.huodouai.com/whitepaper/legacy-compatible-evolution.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="企业AI全域治理 · 存量兼容演进最优稳态">
+<meta name="twitter:description" content="不推翻原有业务、不停机改造、内核优化不扰动存量；通过旁路双轨与渐进式稳态演进方法论，给出企业 AI 治理体系从存量系统平滑迁移的最优路径。">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "企业AI全域治理 · 存量兼容演进最优稳态", "url": "https://www.huodouai.com/whitepaper/legacy-compatible-evolution.html", "datePublished": "2026-10-28", "dateModified": "2026-10-28", "inLanguage": "zh-CN", "author": {"@type": "Organization", "name": "元极恒一 ZONGYUAN-ROOT", "identifier": "DID-BR-000002"}, "publisher": {"@type": "Organization", "name": "元极恒一 ZONGYUAN-ROOT Lv11 自治内核", "identifier": "DID-BR-000002"}, "about": ["存量兼容", "渐进式演进", "双轨并行", "平滑迁移"], "description": "不推翻原有业务、不停机改造、内核优化不扰动存量；通过旁路双轨与渐进式稳态演进方法论，给出企业 AI 治理体系从存量系统平滑迁移的最优路径。"}
+</script>
+<style>.back{display:inline-block;margin:0 0 14px;font-size:13px;font-weight:600;color:#1b9aaa;text-decoration:none}.back:hover{color:#0e7d8a}</style></head>
+<body>
+<a class="back" href="index.html">← 返回白皮书库</a>
+
+
+<div class="hero">
+  <div class="dna">AI·GOV·STEADY</div>
+  <span class="tag">企业AI全域治理中枢</span>
+  <h1>企业AI全域治理 · 存量兼容演进最优稳态</h1>
+  <div class="meta">
+    <span><b>版本</b> V1.0</span>
+    <span><b>治理基座</b> 企业AI全域治理中枢</span>
+    <span><b>文档标识</b> GOV-AIG-2026</span>
+  </div>
+  <div class="axiom">
+    <b>顶层治理公理：</b> 风险最小优先 &nbsp;&gt;&nbsp; 成本最小优先 &nbsp;&gt;&nbsp; 收益最大优先
+    &nbsp;|&nbsp; <b>适用范围：</b> 存量业务线与三架构全域AI治理体系融合落地、渐进式改造、稳态运维
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 0 摘要 -->
+  <div class="sec">
+    <div class="card" style="background:linear-gradient(135deg,#fff,#f3f7ff)">
+      <b style="font-size:15px">摘要 · 一句话定调</b>
+      <p style="margin-top:8px;font-size:14px;color:var(--slate)">
+        一套 <b>不推倒重建、不停机、兼容存量业务</b> 的企业AI全域治理最优稳态方案。
+        由 <b>AI稳态治理</b>、<b>四维数据治理</b>、<b>工具规范治理</b> 三大正交子体系构成，
+        采用 <b>外挂观测 → 资产归化 → 能力封装注册 → 灰度收敛</b> 渐进路径。
+        存量系统原地保留，治理能力作为<b>旁路叠加层</b>运行，内核迭代默认弱校验，不扰动原有链路，所有新增AI需求统一遵循三态范式开发。
+      </p>
+    </div>
+  </div>
+
+  <!-- 1 三大正交治理架构 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">3</span><h2>核心范式总览 · 三大正交治理架构</h2><span class="en">Three Orthogonal Sub-Systems</span></div>
+    <div class="tri">
+      <div class="arch a1">
+        <div class="bar"></div><div class="ic">⚖</div>
+        <h3>AI稳态治理架构</h3>
+        <div class="role">统一秩序标尺 · 裁决与基线</div>
+        <ul>
+          <li>治理宪章 → 治理公理 → 治理法则 → 治理规则（优先级递减）</li>
+          <li>提供统一裁决标尺，对齐风险/合规/真值基线</li>
+          <li>承接分歧评审收敛，不替换原生业务执行</li>
+        </ul>
+      </div>
+      <div class="arch a2">
+        <div class="bar"></div><div class="ic">▦</div>
+        <h3>四维数据治理架构</h3>
+        <div class="role">统一资产语义 · 虚拟索引</div>
+        <ul>
+          <li>空间维 / 时间维 / 属性维 / 因果维 正交本体</li>
+          <li>不迁移原始数据源，构建只读虚拟索引层</li>
+          <li>统一语义视图、权限隔离、版本溯源</li>
+        </ul>
+      </div>
+      <div class="arch a3">
+        <div class="bar"></div><div class="ic">⛓</div>
+        <h3>工具规范治理架构</h3>
+        <div class="role">统一管控AI执行单元</div>
+        <ul>
+          <li>逻辑态 → 算子态 → 代码执行态 三层单向隔离</li>
+          <li>标准化管控 Agent/Skill/Prompt/工作流/RAG</li>
+          <li>消除黑盒能力，消除跨层越权</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 AI稳态治理层级 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">3.1</span><h2>AI稳态治理架构 · 层级金字塔</h2><span class="en">Charter → Axiom → Law → Rule</span></div>
+    <div class="grid2">
+      <div class="card">
+        <div class="pyr">
+          <div class="lvl l0">治理宪章<small>不可变更顶层纲领 · 风险最小优先 / 真值锚定 / 全域溯源 / 内外隔离</small></div>
+          <div class="arrow">▼ 优先级逐级递减</div>
+          <div class="lvl l1">治理公理<small>体系自洽基础预设 · 真值 / 风险 / 权限 / 合规 判定范式</small></div>
+          <div class="arrow">▼</div>
+          <div class="lvl l2">治理法则<small>长效稳定运行约束 · 缓存一致性 / 配额稳态 / 记忆对齐 / 死循环熔断</small></div>
+          <div class="arrow">▼</div>
+          <div class="lvl l3">治理规则<small>可校验可配置细则 · 风险分级 / 鉴权 / 变更审批 / 哈希锁档</small></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;margin-bottom:8px;font-weight:800">核心作用</h3>
+        <p style="font-size:13.5px;color:var(--slate);margin-bottom:14px">
+          提供<b>统一裁决标尺</b>，统一风险、合规、真值基线，承接分歧评审收敛。
+        </p>
+        <h3 style="font-size:14px;margin-bottom:8px;font-weight:800">稳态旁路设计要点</h3>
+        <ul style="font-size:13px;color:var(--slate);padding-left:18px;line-height:1.9">
+          <li>存量内建判断/风控标记为<b>业务本地基线</b>，全域治理秩序为<b>全局基线</b></li>
+          <li>裁决网关<b>旁路接入</b>，镜像二次校验</li>
+          <li><b>默认弱校验</b>：仅记录差异、上报 L3 分歧台账，不阻断</li>
+          <li><b>强拦截</b>属特殊审批开关，单独灰度，不作默认</li>
+          <li>统一 Golden Dataset 与一致率口径</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 四维数据治理 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">3.2</span><h2>四维数据治理架构 · 正交本体</h2><span class="en">Space · Time · Attribute · Causality</span></div>
+    <div class="dim4">
+      <div class="dim k1"><div class="dh"><div class="dot">空</div><h4>空间维</h4></div>
+        <p>归属业务域、部门、隔离沙箱，定义资产边界与越权隔离。天然约束跨域检索，防薪酬/绩效/招聘等敏感数据越权泄露。</p></div>
+      <div class="dim k2"><div class="dh"><div class="dot">时</div><h4>时间维</h4></div>
+        <p>创建时间、版本快照、生效失效周期，支撑溯源、回滚、时效治理。构建只读虚拟四维索引副本，仅同步元数据。</p></div>
+      <div class="dim k3"><div class="dh"><div class="dot">属</div><h4>属性维</h4></div>
+        <p>密级、风险等级、真值等级、置信度、资产类型，供给裁决校验标签。原始数据源原地留存，不迁移不回写。</p></div>
+      <div class="dim k4"><div class="dh"><div class="dot">因</div><h4>因果维</h4></div>
+        <p>上下游依赖、引用关系、风险传导链路、Agent/算子关联。定时一致性巡检对比源数据与索引副本。</p></div>
+    </div>
+  </div>
+
+  <!-- 4 工具三态 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">3.3</span><h2>工具规范治理架构 · 三态正交隔离</h2><span class="en">Logic → Operator → Code</span></div>
+    <div class="card" style="display:flex;flex-direction:column;align-items:center">
+      <div class="state">
+        <div class="st s1"><h4>逻辑态 · 业务语义声明层</h4><p>定义目标 / 输入输出Schema / 触发条件 / 人机边界，为版本化锁档资产。<b>不承载真值、风控裁决逻辑</b>。</p></div>
+        <div class="st-arr"><span class="ln"></span>▲ 单向依赖 · 禁止跨层越权 ▼<span class="ln"></span></div>
+        <div class="st s2"><h4>算子态 · 能力调度抽象层</h4><p>负责能力注册 / 参数映射 / 权限预检 / 路由分发 / 降级切换，<b>只调度不裁决</b>。</p></div>
+        <div class="st-arr"><span class="ln"></span>▲<span class="ln"></span></div>
+        <div class="st s3"><h4>代码执行态 · 底层运行载体</h4><p>承载脚本 / 接口 / 容器 / SDK 调用，做沙箱隔离、资源限额、超时熔断。</p></div>
+      </div>
+      <div class="st-note">标准化管控所有 Agent、Skill、Prompt、工作流、RAG 等 AI 执行单元，消除黑盒能力。</div>
+    </div>
+  </div>
+
+  <!-- 5 融合总策略 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">4</span><h2>存量业务融合总策略 · 双轨对照灰度收敛</h2><span class="en">Bypass Governance + Dual-Track</span></div>
+    <div class="dual">
+      <div class="track old"><h4>存量原生链路</h4><p>原有入口、原有代码、原有逻辑，独立流转。作为永久保留的兜底通道，一键回滚即解除治理干预。</p></div>
+      <div class="track new"><h4>体系治理链路</h4><p>复用存量底层执行能力，叠加统一裁决、审计、配额、权限治理能力。小比例流量切入，稳定后放量。</p></div>
+    </div>
+    <div class="pstage">
+      <div class="ps p0"><span class="pn">P0</span><h4>外挂观测</h4><p>镜像输入输出，旁路采集日志做比对校验，<b>只告警、不阻断</b>。不停机。</p></div>
+      <div class="ps p1"><span class="pn">P1</span><h4>资产归化</h4><p>抽取存量文档/案例/评测样本，清洗打四维标签，进入全域资产池。<b>原始数据源不改动</b>。</p></div>
+      <div class="ps p2"><span class="pn">P2</span><h4>能力对齐</h4><p>存量AI能力按三态范式拆解注册，剥离内嵌裁决逻辑，迁移至AI稳态治理层。</p></div>
+      <div class="ps p3"><span class="pn">P3</span><h4>灰度收敛</h4><p>小比例流量切入体系链路，指标稳定后逐步放量；收益不佳则回落，维持双轨稳态。</p></div>
+    </div>
+    <p style="font-size:12.8px;color:var(--sub);margin-top:14px">
+      <b>演进原则：</b>存量业务仅允许故障修复，不再新增AI业务规则；所有新增AI需求，强制按照三架构范式开发。
+    </p>
+  </div>
+
+  <!-- 6 内核边界规则 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">6</span><h2>内核迭代边界治理规则 · GOV-RULE-021</h2><span class="en">Kernel Iteration Boundary</span></div>
+    <div class="rule21">
+      <div class="rh"><span class="badge">治理规则 021</span><b style="font-size:14px">内核迭代天然不扰动存量业务原生链路</b></div>
+      <p>在体系默认弱校验旁路观测、变更闸门隔离、不自动下发破坏性配置的稳态约束下，企业AI治理中枢（AI稳态治理内核、治理宪章/治理公理/治理法则/治理规则、裁决引擎）的版本迭代、逻辑优化、基线调优，<b>天然不扰动、不阻断原有存量业务线原生流转链路</b>。</p>
+      <ol>
+        <li>仅当人工审批<b>主动开启业务域强拦截模式</b>时，内核校验结果才会阻断存量输出；</li>
+        <li>内核变更<b>禁止自动向存量侧推送破坏性配置</b>；基线/规则变更须过分歧评审闸门，按需选择性下发至对应算子、资产域；</li>
+        <li>若内核变更联动触发四维标签、算子权限、配额策略自动变更，该联动逻辑<b>必须纳入评审管控</b>，否则禁止启用。</li>
+      </ol>
+      <div class="pulse">
+        <div class="pp"><b>默认弱校验</b>绕过存量，仅镜像旁路告警</div>
+        <div class="pp"><b>变更闸门</b>隔离，非审批不下发</div>
+        <div class="pp"><b>永久兜底</b>一键回滚存量原生链路</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 流量控制切换兜底 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">7</span><h2>流量控制、切换与兜底机制</h2><span class="en">Traffic · Switch · Fallback</span></div>
+    <div class="tabs">
+      <div class="tab active" data-t="t1">灰度与回滚</div>
+      <div class="tab" data-t="t2">配额与隔离</div>
+      <div class="tab" data-t="t3">自治定时脉冲</div>
+    </div>
+    <div class="tab-body on" id="t1">
+      <div class="ctrl">
+        <div class="ci"><h4><span class="ico" style="background:var(--blue-l);color:var(--blue)">⚡</span>灰度流量策略</h4><p>按租户、用户组、单据比例放量，优先小流量验证，不追求一次性全量切换。</p></div>
+        <div class="ci"><h4><span class="ico" style="background:var(--red);color:#fff">⏪</span>一键回滚开关</h4><p>随时关闭体系调度链路，全部流量回落存量原生链路，解除治理干预。</p></div>
+      </div>
+    </div>
+    <div class="tab-body" id="t2">
+      <div class="ctrl">
+        <div class="ci"><h4><span class="ico" style="background:var(--teal-l);color:var(--teal)">▣</span>配额隔离</h4><p>存量原有算力预算、模型额度与体系新增配额<b>隔离计量</b>，改造不挤占原有业务成本。</p></div>
+        <div class="ci"><h4><span class="ico" style="background:var(--amber-l);color:var(--amber)">⛨</span>强拦截保护</h4><p>强拦截增加审批闸门、灰度开关、告警阈值，不作为默认配置，杜绝误伤存量。</p></div>
+      </div>
+    </div>
+    <div class="tab-body" id="t3">
+      <div class="card">
+        <h4 style="font-size:14px;font-weight:800;margin-bottom:10px">自治定时脉冲任务（周期性自动执行）</h4>
+        <div class="pulse">
+          <div class="pp"><b>双链路对照</b>输出对照校验</div>
+          <div class="pp"><b>索引一致性</b>四维索引 vs 源数据</div>
+          <div class="pp"><b>算子健康度</b>超时 / 失败率巡检</div>
+          <div class="pp"><b>L3分歧台账</b>评审闭环</div>
+          <div class="pp"><b>治理规则锁档</b>评测基线版本巡检</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 演进路线 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">8</span><h2>分阶段演进路线</h2><span class="en">Phased Roadmap</span></div>
+    <table>
+      <thead><tr><th style="width:130px">阶段</th><th>动作</th><th>验收标准</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill s0">阶段0</span><br>永久稳态底座</td><td>存量基座不动，外挂观测网关，建立台账、索引、算子注册</td><td>业务无改动，观测数据稳定，<b>无阻断事件</b></td></tr>
+        <tr><td><span class="pill s1">阶段1</span></td><td>新增需求全部遵循三架构范式开发；存量仅BUG修复</td><td>存量不再新增零散AI逻辑，资产库持续沉淀</td></tr>
+        <tr><td><span class="pill s2">阶段2</span></td><td>逐个评审存量高风险、难维护的AI节点，替换为标准化算子</td><td>稳定低故障存量节点维持封装形态，<b>不主动替换</b></td></tr>
+        <tr><td><span class="pill s3">阶段3</span><br>可选</td><td>存量链路长期无访问、指标持续优于存量，评审归档下线</td><td>满足全部下线评审条件，历史资产归档锁档</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 9 岗位 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">9</span><h2>岗位权责匹配 · AI场景产品负责人</h2><span class="en">AI Scenario PM</span></div>
+    <div class="ctrl">
+      <div class="ci"><h4><span class="ico" style="background:var(--blue-l);color:var(--blue)">⚖</span>AI稳态治理侧</h4><p>翻译业务诉求，定义场景真值基线、合规红线、质量门槛，收集冲突进入分歧台账。</p></div>
+      <div class="ci"><h4><span class="ico" style="background:var(--teal-l);color:var(--teal)">▦</span>四维数据治理侧</h4><p>设计 Golden Dataset 真值集，梳理业务四维本体，搭建可复用业务资产库。</p></div>
+      <div class="ci"><h4><span class="ico" style="background:var(--purple-l);color:var(--purple)">⛓</span>工具治理侧</h4><p>定义逻辑态规格，完成能力选型，对接工程落地算子态、代码执行态。</p></div>
+      <div class="ci"><h4><span class="ico" style="background:var(--amber-l);color:var(--amber)">◑</span>跨部门推动</h4><p>主导流程再造、原型交付、效果成本权衡、指导初级产品人员。</p></div>
+    </div>
+  </div>
+
+  <!-- 10 效果成本风险 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">10</span><h2>效果、成本与风险评估</h2><span class="en">Benefit · Cost · Risk</span></div>
+    <div class="grid2">
+      <div class="kv"><h4>✓ 收益</h4><ul>
+        <li>业务连续性保障，无强制停机改造</li>
+        <li>风险/合规/真值统一，全链路可审计溯源</li>
+        <li>AI能力标准化，效果指标可量化对比</li>
+        <li>资产可跨业务复用，降低交付成本</li>
+        <li>冲突统一收敛，缓解预期矛盾</li>
+      </ul></div>
+      <div class="kv"><h4>⚠ 固定代价</h4><ul>
+        <li>持续维护旁路网关、虚拟索引、对照巡检</li>
+        <li>存在双链路运维开销</li>
+        <li>代价远低于全量重构的停机/阻力/成本</li>
+      </ul></div>
+      <div class="kv x" style="grid-column:1/3"><h4>✕ 核心风险清单与防控</h4><ul>
+        <li>随意开启强拦截 → 增审批闸门、灰度开关、告警阈值</li>
+        <li>内核变更自动下发配置穿透 → 须过分歧评审，禁自动推送破坏性变更</li>
+        <li>业务方抵触 → 产品侧分阶段试点，量化展示收益，渐进引导</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- 11 稳态判定 -->
+  <div class="sec">
+    <div class="sec-h"><span class="n">11</span><h2>稳态判定标准与存量链路下线条件</h2><span class="en">Steady-State Criteria</span></div>
+    <div class="steady">
+      <div class="kv"><h4 style="color:var(--green)">✓ 稳态判定（全部满足）</h4><ul>
+        <li>存量原生链路可用，一键回滚有效</li>
+        <li>内核迭代默认不扰动存量</li>
+        <li>四维索引同步稳定，差异可控</li>
+        <li>算子注册/调度/裁决链路正常</li>
+        <li>分歧台账定期评审闭环</li>
+        <li>成本/效果/风险在预设上限内</li>
+      </ul></div>
+      <div class="kv x"><h4 style="color:var(--red)">✕ 下线条件（全部满足才允许）</h4><ul>
+        <li>灰度长期指标稳定优于存量</li>
+        <li>业务方确认切换，全员用体系</li>
+        <li>存量链路连续 <b>60天</b> 无有效访问</li>
+        <li>完成风险评审，资产归档锁档</li>
+      </ul></div>
+      <div class="kv"><h4 style="color:var(--blue)">∞ 兜底原则</h4><ul>
+        <li>不满足条件 → 永久维持双轨稳态</li>
+        <li>基座不变，上层叠加治理</li>
+        <li>渐进收敛，不激进切换</li>
+        <li>哈希锁档，版本可追溯</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- 12 总结 -->
+  <div class="sec">
+    <div class="card" style="background:linear-gradient(135deg,#1b2a4e,#2f6df0);color:#fff">
+      <h3 style="font-size:18px;font-weight:800;margin-bottom:10px">总结 · 本质一句话</h3>
+      <p style="font-size:14px;color:#eaf1ff;line-height:1.8">
+        本方案构建的最优稳态融合体系，本质是 <b>基座不变、上层叠加治理</b>。
+        三大架构分工明确：<b>AI治理层</b>统一秩序标尺，<b>四维数据层</b>统一资产语义，<b>工具三态层</b>统一管控AI执行单元。
+        存量业务不需要推翻重写，内核层迭代在默认约束下天然不会扰动原有业务；依靠旁路观测、虚拟索引、算子封装、灰度分流、分歧评审闭环，
+        实现企业存量业务持续运行，同时逐步收敛到统一自治AI治理范式，支撑后续所有AI场景规模化、可控化迭代。
+      </p>
+      <p style="text-align:right;margin-top:14px;font-size:18px;font-weight:800;letter-spacing:3px;opacity:.9">◈ ｜ 企业AI全域治理中枢</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="mark">◈</span> &nbsp; 企业AI全域治理白皮书 V1.0<br>
+    企业AI全域治理中枢 · 文档标识 GOV-AIG-2026
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.tab-body').forEach(x=>x.classList.remove('on'));
+      t.classList.add('active');
+      document.getElementById(t.dataset.t).classList.add('on');
+    });
+  });
+</script>
+<div style="text-align:center;padding:20px;font-size:11px;color:#666;border-top:1px solid #333"><a href="/" style="color:#888;margin:0 6px">主页</a>·<a href="/pipeline.html" style="color:#888;margin:0 6px">流水线</a>·<a href="/products.html" style="color:#888;margin:0 6px">产品</a>·<a href="/status.html" style="color:#888;margin:0 6px">状态</a></div></body>
+</html>
