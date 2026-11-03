@@ -77,3 +77,6 @@ project/
 - 基准：[ZONGYUAN-ROOT](https://atomgit.com/zongyuangen/ZONGYUAN-ROOT) `DATA-LAKE-PERSIST/`（README、MANIFEST-LAKE.json、MEDIA-REGISTRY-V2.json、LAKE-LEDGER）
 - 关联作品：[AxiomKit](https://atomgit.com/zongyuangen/AxiomKit) · [yuanji-agent-stack](https://atomgit.com/zongyuangen/yuanji-agent-stack) · [TruthLedger](https://atomgit.com/zongyuangen/TruthLedger) · [NodeHub](https://atomgit.com/zongyuangen/NodeHub) · [SimBench](https://atomgit.com/zongyuangen/SimBench)
 - 许可：CC-BY-4.0（文档）
+---
+
+> **种子档归一**（2026-11-03 谳定）：本仓原随附的 `YUANSHEN-SEED.md` / `YUANSHEN-SEED.json` 已归一至 [Replicore 种子正仓](https://github.com/tanbopiao/Replicore)，正本唯一，本仓不再另存副本。
