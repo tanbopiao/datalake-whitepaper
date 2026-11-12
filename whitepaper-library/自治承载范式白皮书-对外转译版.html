@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自治承载 vs AI外挂赋能：下一代生产系统范式（对外简版）</title>
+<style>
+  :root{
+    --ink:#1c2733; --ink-2:#4a5a6a; --ink-3:#7b8a99;
+    --line:#d8e0e8; --paper:#f7f9fb; --card:#ffffff;
+    --bus:#1a6fa8; --bus-soft:#e5f1f9;
+    --plug:#8a97a4; --plug-soft:#eef1f4;
+    --ok:#2e8b57; --ok-soft:#e8f5ee;
+    --warn:#c2571a; --warn-soft:#fbeee5;
+    --risk:#b03a3a; --risk-soft:#f9eaea;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    color:var(--ink); background:var(--paper); line-height:1.75; font-size:16px;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  header.hero{background:linear-gradient(180deg,#122436 0%,#1c3a55 100%);color:#fff;padding:56px 0 44px}
+  header.hero .kicker{font-size:14px;letter-spacing:.12em;color:#9fc4e0;text-transform:uppercase}
+  header.hero h1{font-size:clamp(26px,4.2vw,40px);line-height:1.3;margin:14px 0 10px;font-weight:700}
+  header.hero p.sub{color:#c5d8e6;max-width:760px}
+  .meta{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:22px;font-size:13.5px;color:#9db8cc}
+  .meta span b{color:#dcebf7;font-weight:600}
+  section{padding:44px 0;border-bottom:1px solid var(--line)}
+  h2{font-size:22px;margin-bottom:6px}
+  h2 .no{color:var(--bus);margin-right:8px;font-variant-numeric:tabular-nums}
+  p.lead{color:var(--ink-2);margin-bottom:22px;max-width:860px}
+  .assert{
+    background:var(--card);border-left:4px solid var(--bus);border-radius:6px;
+    padding:20px 24px;font-size:19px;font-weight:600;box-shadow:0 1px 4px rgba(16,40,60,.06)
+  }
+  .assert small{display:block;font-weight:400;font-size:14px;color:var(--ink-2);margin-top:8px}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+  .duo .side{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 22px}
+  .duo .side h3{font-size:17px;margin-bottom:8px}
+  .duo .side.a h3{color:var(--plug)} .duo .side.b h3{color:var(--bus)}
+  .duo .side .one{font-size:15px;font-weight:600;margin:10px 0 0;padding-top:10px;border-top:1px dashed var(--line)}
+  .duo .side p{font-size:14.5px;color:var(--ink-2)}
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(16,40,60,.05);font-size:14.5px}
+  th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:#eef3f8;font-weight:600;white-space:nowrap}
+  td.dim-first{font-weight:600;color:var(--ink);white-space:nowrap}
+  td.col-a{color:var(--ink-2)} td.col-b{color:#134b70;font-weight:500}
+  .tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .svg-scroll{overflow-x:auto}
+  svg{display:block;width:100%;height:auto;min-width:640px}
+  .laws{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+  .law{background:var(--card);border:1px solid var(--line);border-top:3px solid var(--ok);border-radius:8px;padding:16px 18px}
+  .law h4{font-size:15.5px;margin-bottom:6px}
+  .law h4 .n{color:var(--ok);margin-right:6px}
+  .law p{font-size:13.8px;color:var(--ink-2)}
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+  .path{border-radius:10px;padding:18px 20px;font-size:14.5px}
+  .path.a{background:var(--plug-soft);border:1px solid #d5dce2}
+  .path.b{background:var(--risk-soft);border:1px solid #ecd2d2}
+  .path h4{font-size:16px;margin-bottom:8px}
+  .path.a h4{color:#5d6b78} .path.b h4{color:var(--risk)}
+  .align{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+  .align .item{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px;font-size:14.5px;color:var(--ink-2)}
+  .align .item h4{color:var(--ink);font-size:16px;margin-bottom:8px}
+  .road{margin-top:22px;display:grid;gap:14px}
+  .stage{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+  .stage h4{font-size:15.5px;margin-bottom:8px}
+  .stage.p0 h4{color:var(--warn)} .stage.p1 h4{color:var(--bus)} .stage.p2 h4{color:var(--ink-2)}
+  .stage ul{padding-left:1.2em;font-size:14.2px;color:var(--ink-2)}
+  .stage li{margin:4px 0}
+  .note{background:var(--warn-soft);border:1px solid #eed3bb;border-radius:10px;padding:16px 20px;font-size:14px;color:#7a4a1e;margin-top:22px}
+  footer{padding:36px 0 56px;color:var(--ink-3);font-size:13.5px}
+  footer .frame{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 22px}
+  footer h4{font-size:14.5px;color:var(--ink);margin-bottom:8px}
+  footer li{margin:4px 0}
+  @media (max-width:820px){
+    .duo,.paths,.align{grid-template-columns:1fr}
+    .laws{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:560px){
+    .laws{grid-template-columns:1fr}
+    table{font-size:14px}
+    th,td{padding:9px 10px}
+  }
+</style>
+</head>
+<body data-visualization-style="knowledge-technology">
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Paradigm Whitepaper · External Edition</div>
+    <h1>自治承载 vs AI 外挂赋能<br>下一代生产与运维系统的两条路线</h1>
+    <p class="sub">行业主流做法是把 AI 当插件接在旧系统边上；本体系主张另一条路线：让自治调度内核成为流程的主干，把人的经验固化成机器可执行的规则。本文说明两条路线的差异、演进路径与约束条件。</p>
+    <div class="meta">
+      <span>版本 <b>V1.0（对外简版）</b></span>
+      <span>日期 <b>2026年11月13日</b></span>
+      <span>出品 <b>火斗云智AIOS · 体系原创</b></span>
+      <span>性质 <b>体系工作假说与实践推论</b></span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><span class="no">01</span>核心论点</h2>
+    <div class="assert">
+      赋能是效率加法；自治承载是控制权迁移。
+      <small>前者让现有流程跑得快一点，后者换掉流程的驱动方式。前者是行业标配，难以形成长期壁垒；后者是下一代生产与运维系统的主线范式。</small>
+    </div>
+    <div class="duo">
+      <div class="side a">
+        <h3>AI 外挂赋能（主流路线）</h3>
+        <p>原有业务闭环不变：传统流程引擎主导，AI 承担识图、摘要、生成、翻译等局部任务；决策、路由、版本收敛、资产确权仍由旧系统或人控制。</p>
+        <p class="one">一句话：人＋旧系统，指挥 AI 干活。</p>
+      </div>
+      <div class="side b">
+        <h3>AI 自治承载（本体系路线）</h3>
+        <p>自治内核拥有闭环调度权：业务约束、优先级、冲突判定、归档策略全部结构化为可执行规则；智能体集群在边界内自主完成全链路生产，人只做顶层规则校准与异常兜底。</p>
+        <p class="one">一句话：真值规则指挥自治体运转，人校准规则边界。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="no">02</span>范式对比</h2>
+    <p class="lead">固定八个维度逐项对比，看清两条路线在流程主控、规则形态与风险结构上的本质差异。</p>
+    <div class="tbl-scroll">
+    <table>
+      <tr><th>维度</th><th>AI 外挂赋能（主流）</th><th>AI 自治承载（本体系路线）</th></tr>
+      <tr><td class="dim-first">流程主控</td><td class="col-a">传统流程引擎、人工</td><td class="col-b">AxiomGate 自治裁决内核</td></tr>
+      <tr><td class="dim-first">AI 定位</td><td class="col-a">功能模块、辅助工具</td><td class="col-b">流程载体、任务调度主体</td></tr>
+      <tr><td class="dim-first">规则形态</td><td class="col-a">文档流程、人读规范</td><td class="col-b">可执行规则契约、顶层公理、单源真值、哈希账本</td></tr>
+      <tr><td class="dim-first">流转触发</td><td class="col-a">人工审批、旧系统事件</td><td class="col-b">自治内核按规则自主规划、分派、自检、归档</td></tr>
+      <tr><td class="dim-first">异常策略</td><td class="col-a">AI 报错，全部退回人工</td><td class="col-b">边界内自消解；越界阻断＋告警上抛人工</td></tr>
+      <tr><td class="dim-first">存量关系</td><td class="col-a">老系统不动，外挂接入</td><td class="col-b">老系统渐进解耦，规则持续迁移进自治层</td></tr>
+      <tr><td class="dim-first">迭代模式</td><td class="col-a">需求排期、版本迭代</td><td class="col-b">规则热更新、联邦智能体协同收敛</td></tr>
+      <tr><td class="dim-first">核心风险</td><td class="col-a">卡点多、改造慢，易被原生流水线替代</td><td class="col-b">幻觉、真值漂移、约束失效（须刚性规则兜底）</td></tr>
+      <tr><td class="dim-first">护城河</td><td class="col-a">模型能力、提示词</td><td class="col-b">约束体系、确权账本、冲突消解、稳态自治协议</td></tr>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="no">03</span>三层演进路径</h2>
+    <p class="lead">自治承载不是一步到位的豪赌，而是可以分阶段落地的迁移过程。每一层都有明确的交接物与退出方式。</p>
+    <div class="svg-scroll">
+    <svg viewBox="0 0 960 300" role="img" aria-label="L1 辅助赋能、L2 半自治承载、L3 全自治稳态三阶段演进示意图">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8a97a4"/>
+        </marker>
+      </defs>
+      <rect x="20" y="40" width="270" height="200" rx="10" fill="#eef1f4" stroke="#d5dce2"/>
+      <text x="155" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#5d6b78">L1 辅助赋能</text>
+      <text x="155" y="105" text-anchor="middle" font-size="13" fill="#4a5a6a">传统流程主导</text>
+      <text x="155" y="128" text-anchor="middle" font-size="13" fill="#4a5a6a">AI 做渲染、生成、抽取</text>
+      <text x="155" y="151" text-anchor="middle" font-size="13" fill="#4a5a6a">人工串联、校验、归档</text>
+      <text x="155" y="186" text-anchor="middle" font-size="12.5" fill="#7b8a99">目标：积累规则素材</text>
+      <text x="155" y="206" text-anchor="middle" font-size="12.5" fill="#7b8a99">采集全链路作业规范</text>
+      <rect x="345" y="40" width="270" height="200" rx="10" fill="#e5f1f9" stroke="#9fc4e0"/>
+      <text x="480" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#1a6fa8">L2 半自治承载</text>
+      <text x="480" y="105" text-anchor="middle" font-size="13" fill="#134b70">自治内核接管确定性闭环</text>
+      <text x="480" y="128" text-anchor="middle" font-size="13" fill="#134b70">快照、校验、批量生成、落账</text>
+      <text x="480" y="151" text-anchor="middle" font-size="13" fill="#134b70">冲突与越界自动阻断上报</text>
+      <text x="480" y="186" text-anchor="middle" font-size="12.5" fill="#3f7296">目标：确定性工作流无人值守</text>
+      <text x="480" y="206" text-anchor="middle" font-size="12.5" fill="#3f7296">保留人工熔断开关</text>
+      <rect x="670" y="40" width="270" height="200" rx="10" fill="#e8f5ee" stroke="#9fcdb1"/>
+      <text x="805" y="75" text-anchor="middle" font-size="17" font-weight="700" fill="#2e8b57">L3 全自治稳态</text>
+      <text x="805" y="105" text-anchor="middle" font-size="13" fill="#236a44">智能体集群自主调度</text>
+      <text x="805" y="128" text-anchor="middle" font-size="13" fill="#236a44">资源分配、版本收敛、风险自检</text>
+      <text x="805" y="151" text-anchor="middle" font-size="13" fill="#236a44">旧系统仅作审计查询入口</text>
+      <text x="805" y="186" text-anchor="middle" font-size="12.5" fill="#4c8a63">目标：业务自演化</text>
+      <text x="805" y="206" text-anchor="middle" font-size="12.5" fill="#4c8a63">人只做顶层方向校准</text>
+      <line x1="295" y1="140" x2="338" y2="140" stroke="#8a97a4" stroke-width="2.5" marker-end="url(#arrow)"/>
+      <line x1="620" y1="140" x2="663" y2="140" stroke="#8a97a4" stroke-width="2.5" marker-end="url(#arrow)"/>
+      <text x="317" y="130" text-anchor="middle" font-size="11" fill="#7b8a99">规则迁移</text>
+      <text x="642" y="130" text-anchor="middle" font-size="11" fill="#7b8a99">边界扩展</text>
+    </svg>
+    </div>
+    <p style="font-size:14.5px;color:var(--ink-2);margin-top:14px">当前大量环节仍处于 L1；本体系主攻阶段为 L2——把确定性工作流逐步交给自治内核接管，同时保留人工熔断开关。L3 是长期目标，依赖约束体系与账本体系的成熟度，不设时间表。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="no">04</span>自治的前置铁律</h2>
+    <p class="lead">自治不等于无约束。以下六条是自治成立的前提，缺一不可。</p>
+    <div class="laws">
+      <div class="law"><h4><span class="n">一</span>单源真值</h4><p>设唯一权威基线（single source of truth），禁止多版本随意覆盖；一切生产从最新基线出发。</p></div>
+      <div class="law"><h4><span class="n">二</span>分层约束栈</h4><p>顶层公理 &gt; 治理规则 &gt; 可执行规则契约 &gt; 业务临时规则，下层不得越位修改上层。</p></div>
+      <div class="law"><h4><span class="n">三</span>三级冲突消解</h4><p>规则自动消解 → 真值账本仲裁 → 人工审批终审，逐级上升，不留无主冲突。</p></div>
+      <div class="law"><h4><span class="n">四</span>只读锁档机制</h4><p>固化资产与顶层规则默认只读，任何变更必须审批并留痕。</p></div>
+      <div class="law"><h4><span class="n">五</span>可审计账本</h4><p>每一次动作的时间戳与哈希指纹持久归档，全程可追溯、可复核。</p></div>
+      <div class="law"><h4><span class="n">六</span>熔断边界</h4><p>设定不可越界红线，红线之外禁止自治决策，一律回到人工。</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="no">05</span>风险警示</h2>
+    <p class="lead">没有刚性约束的「自由 AI 自治」属于伪自治：会出现事实漂移、幻觉产出、资产不一致、确权失效，是高风险半成品。浪潮之下，两条典型的败局路径是——</p>
+    <div class="paths">
+      <div class="path a">
+        <h4>路径 A：停留在外挂赋能</h4>
+        <p>只拿 AI 给存量业务提速，不建原生自治底座。短期省事，长期上限锁死，最终被 AI 原生流水线替代。</p>
+      </div>
+      <div class="path b">
+        <h4>路径 B：盲目放开自治</h4>
+        <p>不搭真值与锁档体系就放开自治，生产资产持续崩坏，不可审计、不可回溯，一次事故足以清空全部信任。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="no">06</span>业务对齐</h2>
+    <p class="lead">存量业务与 AI 原生新项目，各走各的路线，不做一刀切。</p>
+    <div class="align">
+      <div class="item">
+        <h4>存量业务：先提效，后迁移</h4>
+        <p>先用外挂赋能拿到确定性的效率收益，同时持续把作业规范、质量标准、归档规则翻译成自治层的可执行规则，逐步解耦旧流程引擎。</p>
+      </div>
+      <div class="item">
+        <h4>AI 原生新项目：从第一天就自治</h4>
+        <p>新项目不搭传统流程引擎，从设计之初就按自治承载范式搭建：规则先行、账本随行、边界显式。</p>
+      </div>
+    </div>
+    <p style="font-size:14.5px;color:var(--ink-2);margin-top:18px">差异化竞争的判断：不与通用大模型厂商比拼模型能力本身；护城河是一整套可审计、可收敛、带确权的自治生产操作系统。需要直面的反证是——若大模型厂商把同类工具链原生内化，这条护城河须依靠行业纵深的规则资产与持续沉淀的审计数据来续期，这本身也是本体系 L2 阶段要验证的命题。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="no">07</span>迭代方向（V0.3 规划）</h2>
+    <p class="lead">优先级 P0 &gt; P1 &gt; P2；先加固安全底盘，再接生产流水线，最后扩展联邦协同。</p>
+    <div class="road">
+      <div class="stage p0">
+        <h4>P0 · 稳态底座（优先落地）</h4>
+        <ul>
+          <li>规则契约解析器：把文档化的作业规范自动转成可执行规则，接入冲突判定</li>
+          <li>账本增强：自治任务输出 Merkle 快照，自动写入哈希账本，校验脚本化</li>
+          <li>分级熔断：配置区分可自治域、告警域、强制人工域，越界直接阻断</li>
+          <li>基线前置：所有智能体开工前强制拉取最新权威基线，禁止过期基线执行</li>
+        </ul>
+      </div>
+      <div class="stage p1">
+        <h4>P1 · 生产流水线接入</h4>
+        <ul>
+          <li>内容生产流水线接入自治调度：单件全链路自治，自动校验完整性</li>
+          <li>3D 资产流水线规则化：美学铁律、角色设定、世界观约束封装为校验算子，生成后自动自检漂移</li>
+          <li>记忆网关联动：自治结果自动增量入库，记忆召回受顶层公理过滤，禁止越界召回</li>
+        </ul>
+      </div>
+      <div class="stage p2">
+        <h4>P2 · 联邦协同与观测</h4>
+        <ul>
+          <li>A2A 联邦协议最小原型：多智能体分工、任务认领、结果回执、真值对齐</li>
+          <li>自治运行观测面板：任务树、校验结果、冲突记录、熔断日志的极简审计视图（只看不改）</li>
+          <li>失败案例沉淀库：自动收集幻觉、校验失败、规则冲突样本，反向迭代约束规则</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">
+      <strong>下一步排序：</strong>①先落地 P0 账本＋熔断模块，加固自治安全底盘；②选取内容生产产线作为第一条半自治承载试点；③输出内部宣讲一页版摘要，用于共识对齐。
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="frame">
+      <h4>口径说明（对外版）</h4>
+      <ul>
+        <li>本文为体系方法论的对外转译版，范式主张属<strong>工作假说与实践推论</strong>，非最终定论；随实践持续修订，版本只增不覆盖。</li>
+        <li>机制名保留并加注：「算子契约」指可执行的规则契约；「真值账本」指只增不改、哈希可查的变更记录；「熔断」指越界即中止的强制开关。</li>
+        <li>品牌与命名：火斗云智AIOS 为企业应用品牌；AxiomGate 为可信 AI 治理中台的公开产品名。</li>
+        <li>背景参照已做中性化处理：原行业语境中「存量业务守住基本盘、增量转向 AI 原生」的共识判断，本文以通用表述转述。</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
